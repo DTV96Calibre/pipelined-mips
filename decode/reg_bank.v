@@ -60,7 +60,7 @@ module reg_bank(clock, instruction, control_reg_write, control_reg_dest,
 	// reg_write_value inputs are shared (identical) among all modules.
 	// For bank[i], the should_write value is reg_should_write[i] and the
 	// curr_value is bank_outputs[i].
-	register bank[31:0] (clock, 0, reg_should_write, reg_write_value, bank_outputs);
+	register bank[31:0] (clock, reg_should_write, reg_write_value, bank_outputs);
 	
 	// The generate block allows us to use a for loop to set up wires for
 	// each individual register.

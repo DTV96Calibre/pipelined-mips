@@ -1,4 +1,6 @@
 
+`ifndef REGISTER
+`define REGISTER
 
 
 module register(clock, start_value, should_write, new_value, curr_value);
@@ -26,4 +28,4 @@ module register(clock, start_value, should_write, new_value, curr_value);
 
 endmodule
 
-
+`endif

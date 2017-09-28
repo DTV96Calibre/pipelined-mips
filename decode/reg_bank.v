@@ -1,6 +1,9 @@
 
+`ifndef REG_BANK
+`define REG_BANK
 
-`include "mips.h"
+`include "../mips.h"
+`include "register.v"
 
 module reg_bank(clock, instruction, control_reg_write, control_reg_dest,
 		reg_write_value, reg_one_value, reg_two_value);
@@ -84,4 +87,4 @@ module reg_bank(clock, instruction, control_reg_write, control_reg_dest,
 	assign reg_two_value = | reg_two_outputs;
 endmodule
 
-
+`endif

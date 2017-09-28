@@ -1,4 +1,7 @@
 
+`ifndef INSTRUCTION_DECODER
+`define INSTRUCTION_DECODER
+
 `include "mips.h"
 `include "alu_ops.h"
 
@@ -198,4 +201,4 @@ module function_to_alu(function_number, alu_op);
 	end
 endmodule
 
-
+`endif

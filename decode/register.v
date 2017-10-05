@@ -7,7 +7,7 @@
 // This module implements a register.
 // The value in new_value is saved to the register if should_write is 1
 // at the posedge of the clock. To avoid race conditions, avoid modifying
-// the should_write line on the posedge of the clock.
+// the should_write and new_value wires on the posedge of the clock.
 module register(clock, should_write, new_value, curr_value);
 	// The clock.
 	input wire clock;

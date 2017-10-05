@@ -17,17 +17,21 @@ reg [31:0] truevalr;
 
 always @(lvalue, rvalue)
 begin
-    if(lvalue == `dc32)
+    if (lvalue == `dc32)
         truevall = 0;
     else
         truevall = lvalue;
-    if(rvalue == `dc32)
+    if (rvalue == `dc32)
         truevalr = 0;
     else
         truevalr = rvalue;
-    case(aluOP)
-        `ALU_add: result = truevall + truevalr; //lvalue + rvalue;
-        `ALU_OR: result = truevall | truevalr; //lvalue | rvalue;
+    case (aluOP)
+        `ALU_add: result = truevall + truevalr; // lvalue + rvalue;
+        `ALU_sub: result = trueval1 - truevalr; // lvalue - rvalue;
+        `ALU_OR:  result = truevall | truevalr; // lvalue | rvalue;
+        `ALU_AND: result = truevall & truevalr; // lvalue & rvalue;
+        `ALU_slt: result = truevall < truevalr; // lvalue < rvalue;
+        `ALU_undef: result = `dc32;
     endcase
 end
 

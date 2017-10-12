@@ -2,7 +2,7 @@
 
 
 `include "../reg_file.v"
-`include "../register.v"
+`include "../../register/register.v"
 
 `define REG_ID_1 1
 `define REG_ID_2 2

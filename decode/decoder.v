@@ -1,9 +1,13 @@
 
 
 
-`ifndef DECODE_STAGE
-`define DECODE_STAGE
+`ifndef DECODER
+`define DECODER
 
+`include "reg_file.v"
+`include "instr_splitter.v"
+`include "branch_adder.v"
+`include "jump_calculator.v"
 
 // This module encapsulates the entire decode stage.
 // 
@@ -22,7 +26,7 @@
 // allow the values to stabilize.
 //
 // TODO: Add reg_jump_address for jr instruction.
-module decode_stage(clock, instruction, pc_plus_four, writeback_value,
+module decoder(clock, instruction, pc_plus_four, writeback_value,
 		should_writeback, writeback_id, is_i_type, reg_rs_value,
 		reg_rt_value, immediate, branch_address, jump_address,
 		reg_rs_id, reg_rt_id, reg_rd_id, shamt, funct);

@@ -2,7 +2,7 @@
 `ifndef REG_FILE
 `define REG_FILE
 
-`include "register.v"
+`include "../register/register.v"
 
 // This module takes as input the clock, the registers to read, a control
 // signal whether to write to a register, and the value to write to

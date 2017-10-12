@@ -1,0 +1,62 @@
+$date
+	Thu Oct 12 14:23:26 2017
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module register_test $end
+$var reg 1 ! clock $end
+$upscope $end
+$scope module register_test $end
+$var reg 32 " input_val [31:0] $end
+$upscope $end
+$scope module register_test $end
+$var wire 32 # output_val [31:0] $end
+$upscope $end
+$scope module register_test $end
+$var reg 1 $ should_write $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+0$
+b0 #
+b1100100 "
+0!
+$end
+#1
+1!
+#2
+b101 "
+0!
+#3
+1!
+#4
+0!
+#5
+1!
+#6
+1$
+0!
+#7
+b101 #
+1!
+#8
+0!
+#9
+1!
+#10
+b101100 "
+0!
+#11
+b101100 #
+1!
+#12
+0!
+#13
+1!
+#14
+0!

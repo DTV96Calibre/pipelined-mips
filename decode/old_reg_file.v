@@ -60,17 +60,22 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 	// registers.
 	wire reg_should_write [31:0];
 	wire [31:0] bank_outputs [31:0];
-	wor [31:0] reg_rs_outputs;
-	wor [31:0] reg_rt_outputs;
+	wire [31:0] reg_rs_outputs [31:0];
+	wire [31:0] reg_rt_outputs [31:0];
+	wire reg_is_perm [31:0];
 
 	// Invert the clock for the registers.
 	assign inverted_clock = ~clock;
 
+	// This ensures no value is ever written to the $zero register.
+	assign reg_is_perm[0] = 1;
+	assign reg_is_perm[31:1] = 0;
+	
 	
 	// For bank[i], the should_write value is reg_should_write[i] and the
 	// curr_value is bank_outputs[i].
-	//register bank [31:0] (inverted_clock, reg_should_write, reg_write_value,
-	//		bank_outputs);
+	register [31:0] bank(inverted_clock, reg_should_write, reg_write_value,
+			bank_outputs);
 	
 	// The generate block allows us to use a for loop to set up wires for
 	// each individual register.
@@ -79,18 +84,13 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 		// Loop through each register, generating stuff specific to
 		// that register.
 		for (i = 0; i < 32; i = i + 1) begin
-			wire reg_should_write_gen;
-			wire [31:0] reg_output;
-
-			register r(inverted_clock, reg_should_write_gen, reg_write_value, reg_output);
-			
 			// Open this register for writing if reg_write_id
 			// matches and it's NOT permanent.
-			assign reg_should_write_gen = ((i == control_write_id) ? 1 : 0) & (i != 0);
+			assign reg_should_write[i] = ((i == reg_write_id) ? 1 : 0) & ~reg_is_perm[i];
 			// Move this register's value on to the corresponding output if
 			// the reg_id matches.
-			assign reg_rs_outputs = (i == reg_rs_id) ? reg_output : 0;
-			assign reg_rt_outputs = (i == reg_rt_id) ? reg_output : 0;
+			assign reg_rs_outputs[i] = (i == reg_rs_id) ? bank_outputs[i] : 0;
+			assign reg_rt_outputs[i] = (i == reg_rt_id) ? bank_outputs[i] : 0;
 		end
 	endgenerate
 
@@ -98,6 +98,8 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 	// for the registers that match. The reduction OR operator takes every
 	// value in the array and or's them together, resulting in just the
 	// value of the matching register.
+	assign reg_rs_value = | reg_rs_outputs;
+	assign reg_rt_value = | reg_rt_outputs;
 endmodule
 
 `endif

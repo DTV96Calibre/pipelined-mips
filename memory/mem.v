@@ -1,4 +1,4 @@
-`ifndef MIPS
+`ifndef MIPS_H
 `include "../mips.h"
 `endif
 

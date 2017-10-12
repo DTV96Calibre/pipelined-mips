@@ -1,10 +1,10 @@
 //-*-mode:verilog-*--------------------------------------------------------
-//  
+//
 //  Copyright (c) 1999 Cornell University
 //  Computer Systems Laboratory
 //  Cornell University, Ithaca, NY 14853
 //  All Rights Reserved
-//  
+//
 //  Permission to use, copy, modify, and distribute this software
 //  and its documentation for any purpose and without fee is hereby
 //  granted, provided that the above copyright notice appear in all
@@ -13,10 +13,13 @@
 //  provided "as is" without express or implied warranty. Export of this
 //  software outside of the United States of America may require an
 //  export license.
-//  
+//
 //  $Id: mips.h,v 1.4 1999/08/21 00:49:20 rajit Exp $
-//  
+//
 //-------------------------------------------------------------------------
+
+`ifndef MIPS_H
+`define MIPS_H
 
 // Clock parameters
 `define cycle  10
@@ -362,3 +365,5 @@
 `define SIZE_BYTE  2'h0
 `define SIZE_HALF  2'h1
 `define SIZE_WORD  2'h2
+
+`endif

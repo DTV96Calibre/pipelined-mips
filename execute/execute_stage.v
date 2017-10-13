@@ -5,7 +5,7 @@
 `ifndef EXECUTE_STAGE
 `define EXECUTE_STAGE
 
-// This module encapsulates the entire execute stage.
+// This module encapsulates the entire execute pipeline register.
 module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 	ALUSrcD, RegDstD, RD1, RD2, RsD, RtD, RdD, SignImmD,
 	RegWriteE, MemtoRegE, MemWriteE, ALUControlE, ALUSrcE, RegDstE,

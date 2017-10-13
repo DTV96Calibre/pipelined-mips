@@ -5,7 +5,7 @@
 `ifndef MEM_STAGE
 `define MEM_STAGE
 
-// This module encapsulates the entire execute stage.
+// This module encapsulates the entire memory pipeline register.
 module mem_stage(clk, RegWriteE, MemtoRegE, MemWriteE, ALUOutE, WriteDataE,
 	WriteRegE, RegWriteM, MemtoRegM, MemWriteM, ALUOutM, WriteDataM, WriteRegM);
 

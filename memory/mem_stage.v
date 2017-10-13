@@ -54,17 +54,17 @@ module mem_stage(clk, RegWriteE, MemtoRegE, MemWriteE, ALUOutE, WriteDataE,
 	// The 5-bit register code that will be written to.
 	output reg [4:0] WriteRegM;
 
-	// One of five pipeline stages that is synchronized with the rising edge of
-	// the clock.
-	always @(posedge clk)
-	begin
-		RegWriteM <= RegWriteE;
-		MemtoRegM <= MemtoRegE;
-		MemWriteM <= MemWriteE;
-		ALUOutM <= ALUOutE;
-		WriteDataM <= WriteDataE;
-		WriteRegM <= WriteRegE;
-	end
+	// Values in the mem stage will always pass through
+	wire signal;
+	assign signal = 1;
+
+	// Propagate values
+	pipeline_reg_1bit reg_write(clk, signal, RegWriteM, RegWriteE);
+	pipeline_reg_1bit mem_to_reg(clk, signal, MemtoRegM, MemtoRegE);
+	pipeline_reg_1bit mem_write(clk, signal, MemWriteM, MemWriteE);
+	pipeline_reg alu_out(clk, signal, ALUOutM, ALUOutE);
+	pipeline_reg write_data(clk, signal, WriteDataM, WriteDataE);
+	pipeline_reg_5bit write_reg(clk, signal, WriteRegM, WriteRegE);
 
 endmodule
 `endif

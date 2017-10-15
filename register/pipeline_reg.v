@@ -37,6 +37,40 @@ module pipeline_reg_1bit(clock, clear, new_value, curr_value);
 	pipeline_reg value_reg(clock, clear, adj_new_value, adj_curr_value);
 endmodule
 
+module pipeline_reg_2bit(clock, clear, new_value, curr_value);
+	input wire clock;
+	input wire clear;
+	input wire [1:0] new_value;
+	output wire [1:0] curr_value;
+
+	wire [31:0] adj_new_value;
+	wire [31:0] adj_curr_value;
+
+	assign adj_new_value[1:0] = new_value;
+	assign adj_new_value[31:2] = 0;
+
+	assign curr_value = adj_curr_value[1:0];
+
+	pipeline_reg value_reg(clock, clear, adj_new_value, adj_curr_value);
+endmodule
+
+module pipeline_reg_3bit(clock, clear, new_value, curr_value);
+	input wire clock;
+	input wire clear;
+	input wire [2:0] new_value;
+	output wire [2:0] curr_value;
+
+	wire [31:0] adj_new_value;
+	wire [31:0] adj_curr_value;
+
+	assign adj_new_value[2:0] = new_value;
+	assign adj_new_value[31:3] = 0;
+
+	assign curr_value = adj_curr_value[2:0];
+
+	pipeline_reg value_reg(clock, clear, adj_new_value, adj_curr_value);
+endmodule
+
 module pipeline_reg_4bit(clock, clear, new_value, curr_value);
 	input wire clock;
 	input wire clear;

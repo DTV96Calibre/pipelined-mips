@@ -1,5 +1,5 @@
 $date
-	Thu Oct 12 14:23:26 2017
+	Thu Oct 12 15:24:18 2017
 $end
 $version
 	Icarus Verilog
@@ -22,7 +22,7 @@ $upscope $end
 $enddefinitions $end
 #0
 $dumpvars
-0$
+1$
 b0 #
 b1100100 "
 0!
@@ -33,16 +33,15 @@ $end
 b101 "
 0!
 #3
+b101 #
 1!
 #4
 0!
 #5
 1!
 #6
-1$
 0!
 #7
-b101 #
 1!
 #8
 0!

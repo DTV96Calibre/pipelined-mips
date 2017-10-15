@@ -16,7 +16,7 @@ module register_test();
 		
 		clock = 0;
 		input_val = 100;
-		should_write = 0;
+		should_write = 1;
 		#1 clock = 1;
 		#1 clock = 0;
 		input_val = 5;

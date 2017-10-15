@@ -1,6 +1,4 @@
 
-
-
 `ifndef PIPELINE_REG
 `define PIPELINE_REG
 

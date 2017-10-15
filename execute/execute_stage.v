@@ -126,10 +126,10 @@ module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 	output reg [31:0] WriteDataE;
 
 	// The 32-bit LHS of the ALU operation to perform.
-	reg [31:0] SrcAE; // Note: Not a top-level output from the EX stage
+	wire [31:0] SrcAE; // Note: Not a top-level output from the EX stage
 
 	// The 32-bit RHS of the ALU operation to perform.
-	reg [31:0] SrcBE; // Note: Not a top-level output from the EX stage
+	wire [31:0] SrcBE; // Note: Not a top-level output from the EX stage
 
 	// The 32-bit output from the ALU.
 	output reg [31:0] ALUOutE;

@@ -14,7 +14,7 @@
 
 module alu_control(opcode, funct, alu_op);
 	input wire [5:0] opcode;
-	input wire [4:0] funct;
+	input wire [5:0] funct;
 	output reg [2:0] alu_op;
 
 	always @(*) begin

@@ -107,14 +107,23 @@ endmodule
 module imm_sign_extend(raw_immediate, extended_immediate);
 	
 	// The 16-bit signed value extracted from an instruction.
-	input signed wire [15:0] raw_immediate;
+	input wire signed [15:0] raw_immediate;
 
 	// A 32-bit value that can be used for math and comparison.
-	output signed wire [31:0] extended_immediate;
+	output wire signed [31:0] extended_immediate;
 
 	// Verilog automatically sign extends the smaller, 16-bit value into
 	// a 32-bit value.
 	assign extended_immediate = raw_immediate;
+endmodule
+
+module instr_opcode(instruction, opcode);
+	
+	input wire [31:0] instruction;
+	
+	output wire [5:0] opcode;
+
+	assign opcode = instruction[31:26];
 endmodule
 
 

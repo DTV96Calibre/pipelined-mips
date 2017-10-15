@@ -10,10 +10,13 @@
 `include "classify.v"
 `include "alu_control.v"
 
-module control_unit(opcode, funct, reg_write, mem_to_reg, mem_write, alu_op, alu_src, reg_dest, branch, jump, jump_reg, jump_link);
+module control_unit(opcode, funct, is_r_type, reg_write, mem_to_reg, mem_write, alu_op, alu_src, reg_dest, branch, jump, jump_reg, jump_link);
 
 	input wire [5:0] opcode;
-	input wire [4:0] funct;
+	input wire [5:0] funct;
+	
+	// Used by the decoder.
+	output wire is_r_type;
 
 	output wire reg_write;
 	output wire mem_to_reg;
@@ -28,7 +31,7 @@ module control_unit(opcode, funct, reg_write, mem_to_reg, mem_write, alu_op, alu
 	output wire jump_reg;
 	output wire jump_link;
 
-	wire is_r_type;
+	// wire is_r_type;	// Declared as an output.
 	wire is_i_type;
 	wire is_j_type;
 	

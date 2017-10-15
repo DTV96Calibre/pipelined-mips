@@ -41,7 +41,7 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	output wire reg_write_D;
 	output wire mem_to_reg;
 	output wire mem_write;
-	output wire [2:0] alu_op;
+	output wire [3:0] alu_op;
 	output wire alu_src;
 	output wire reg_dest;
 	output wire jump;

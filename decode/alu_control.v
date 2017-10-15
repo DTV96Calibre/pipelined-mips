@@ -4,10 +4,6 @@
 `include "../mips.h"
 `endif
 
-`ifndef ALU_OPS_H
-`include "../alu_ops.h"
-`endif
-
 `ifndef ALU_CONTROL
 `define ALU_CONTROL
 
@@ -15,25 +11,25 @@
 module alu_control(opcode, funct, alu_op);
 	input wire [5:0] opcode;
 	input wire [5:0] funct;
-	output reg [2:0] alu_op;
+	output reg [3:0] alu_op;
 
 	always @(*) begin
 		case (opcode)
 			`SPECIAL: begin 
 				case (funct)
-					`ADDU: alu_op = `ALU_OP_ADD;
-					`SUBU: alu_op = `ALU_OP_SUB;
-					`SRA: alu_op = `ALU_OP_SRA;
-					`SLL: alu_op = `ALU_OP_SLL;
-					default: alu_op = `ALU_OP_UNDEF;
+					`ADDU: alu_op = `ALU_add;
+					`SUBU: alu_op = `ALU_sub;
+					`SRA: alu_op = `ALU_sra;
+					`SLL: alu_op = `ALU_sll;
+					default: alu_op = `ALU_undef;
 				endcase
 			end
-			`SW: alu_op = `ALU_OP_ADD;
-			`SB: alu_op = `ALU_OP_ADD;
-			`LW: alu_op = `ALU_OP_ADD;
-			`ADDIU: alu_op = `ALU_OP_OR;
-			`ORI: alu_op = `ALU_OP_OR;
-			default: alu_op = `ALU_OP_UNDEF;
+			`SW: alu_op = `ALU_add;
+			`SB: alu_op = `ALU_add;
+			`LW: alu_op = `ALU_add;
+			`ADDIU: alu_op = `ALU_add;
+			`ORI: alu_op = `ALU_OR;
+			default: alu_op = `ALU_undef;
 		endcase
 	end
 	

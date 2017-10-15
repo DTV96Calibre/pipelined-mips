@@ -22,7 +22,7 @@ module control_unit(opcode, funct, is_r_type, reg_write, mem_to_reg, mem_write, 
 	output wire mem_to_reg;
 	output wire mem_write;
 
-	output wire [2:0] alu_op;
+	output wire [3:0] alu_op;
 	
 	output wire alu_src;
 	output wire reg_dest;

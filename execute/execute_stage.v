@@ -2,11 +2,15 @@
 `include "../mips.h"
 `endif
 
-`ifndef EXECUTE_TEST
-`define EXECUTE_TEST
+`ifndef EXECUTE_STAGE
+`define EXECUTE_STAGE
+
+`include "alu.v"
+`include "execute_pipeline_reg.v"
+`include "../util.v"
 
 // This module encapsulates the entire execute stage.
-module execute_test(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
+module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 	ALUSrcD, RegDstD, RD1, RD2, RsD, RtD, RdD, SignImmD,
 	RegWriteE, MemtoRegE, MemWriteE, ALUControlE, ALUSrcE, RegDstE,
 	RD1E, RD2E, RsE, RtE, RdE, SignImmE,
@@ -139,7 +143,7 @@ module execute_test(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 
 	alu myALU(SrcAE, SrcBE, ALUControlE, ALUOutE);
 
-	execute_stage EX_pipeline_reg(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, 
+	execute_pipeline_reg EX_pipeline_reg(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, 
 		ALUControlD, ALUSrcD, RegDstD, RD1, RD2, RsD, RtD, RdD, SignImmD,
 		RegWriteE, MemtoRegE, MemWriteE, ALUControlE, ALUSrcE, RegDstE,
 		RD1E, RD2E, RsE, RtE, RdE, SignImmE);

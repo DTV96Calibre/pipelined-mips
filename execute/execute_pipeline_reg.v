@@ -2,11 +2,13 @@
 `include "../mips.h"
 `endif
 
-`ifndef EXECUTE_STAGE
-`define EXECUTE_STAGE
+`ifndef EXECUTE_PIPELINE_REG
+`define EXECUTE_PIPELINE_REG
+
+`include "../register/pipeline_reg.v"
 
 // This module encapsulates the entire execute pipeline register.
-module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
+module execute_pipeline_reg(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 	ALUSrcD, RegDstD, RD1, RD2, RsD, RtD, RdD, SignImmD,
 	RegWriteE, MemtoRegE, MemWriteE, ALUControlE, ALUSrcE, RegDstE,
 	RD1E, RD2E, RsE, RtE, RdE, SignImmE);

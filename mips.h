@@ -332,6 +332,9 @@
 // ALU control signals added by AMM (may not match actual MIPS implementation)
 `define ALU_sll				4'b1001
 
+// Added for Pipelined Mips project by mdrr001
+`define ALU_sra;
+
 `define ALUOP_LWSW			2'b00
 `define ALUOP_RFMT			2'b10
 `define ALUOP_BR			2'b01

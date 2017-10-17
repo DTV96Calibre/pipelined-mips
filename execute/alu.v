@@ -6,6 +6,12 @@
  *          aluOP -- 3-bit control signal identifying the operation
  * Outputs: result -- 32-bit result of the ALU's computation
  */
+`ifndef MIPS_H
+`include "mips.h"
+`endif
+
+`ifndef ALU
+`define ALU
 module alu(lvalue, rvalue, aluOP, result);
 
 input [31:0] lvalue;
@@ -36,3 +42,4 @@ begin
 end
 
 endmodule
+`endif

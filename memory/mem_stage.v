@@ -2,6 +2,8 @@
 `include "mips.h"
 `endif
 
+`include "register/pipeline_reg.v"
+
 `ifndef MEM_STAGE
 `define MEM_STAGE
 

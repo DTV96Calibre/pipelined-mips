@@ -26,6 +26,12 @@ and accessing unallocated addresses causes Data Memory to print an error. In the
 is 0, the RD (Read Data) output was going to be ignored anyway so no error is printed. RD is
 set to \`undefined (32'hxxxxxxxx) in either case.
 
+#### Note:
+While text is considered read-only, this implementation expects the user to uphold
+this standard and makes no attempt to prevent writing to the text segment of memory.
+This decision was made in order to avoid unnecessary complexity and to leave in
+what could be considered a feature in having the ability to modify text.
+
 ### Writeback
 
 
@@ -54,6 +60,8 @@ repeats for an invalid address outside of the allocated addresses.
 An error for writing to unallocated space and for reading from unallocated space
 while *MemToRegM* is 1 should print for successful tests. Another test
 checks that if *MemToRegM* is 0, no error is printed.
+
+More tests ensure that pass-through signals propagate correctly.
 
 Compile *mem_test.v* as described in **Compilation** ("iverilog mem_test.v -o mem_test").
 Execute the compiled test as described in **Execution** ("./mem_test").

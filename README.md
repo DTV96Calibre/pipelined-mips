@@ -26,11 +26,18 @@ and accessing unallocated addresses causes Data Memory to print an error. In the
 is 0, the RD (Read Data) output was going to be ignored anyway so no error is printed. RD is
 set to \`undefined (32'hxxxxxxxx) in either case.
 
+In order to read information located in the text segment, a copy of text can be
+accessed through the *Data Memory* module. This is required, for example, for printing strings
+of characters defined in the text segment.
+
 #### Note:
 While text is considered read-only, this implementation expects the user to uphold
-this standard and makes no attempt to prevent writing to the text segment of memory.
+this standard and makes no attempt to prevent writing to the text segment of *Data Memory*.
 This decision was made in order to avoid unnecessary complexity and to leave in
-what could be considered a feature in having the ability to modify text.
+what could be considered a feature in having the ability to modify text. Because
+instructions are fetched from a separate memory store, *Instruction Memory*,
+modifying the text segment in *Data Memory* doesn't affect the instructions being fetched.
+
 
 ### Writeback
 

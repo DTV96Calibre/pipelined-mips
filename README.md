@@ -24,7 +24,7 @@ in Data Memory (Memory) to identify whether memory is being accessed intentional
 as we aren't allocating the entire range of memory addresses for simulation performance reasons
 and accessing unallocated addresses causes Data Memory to print an error. In the case that MemtoRegM
 is 0, the RD (Read Data) output was going to be ignored anyway so no error is printed. RD is
-set to \`undefined (32''hxxxxxxxx) in either case.
+set to \`undefined (32'hxxxxxxxx) in either case.
 
 ### Writeback
 

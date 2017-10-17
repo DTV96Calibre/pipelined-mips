@@ -10,6 +10,8 @@ Note: We do not own the above diagram and are only using it for reference when b
 ## Design
 The processor roughly follows the Harris & Hennessy diagram shown above. Each pipeline stage is separated by pipeline registers which act as buffers between the stages.
 
+In the actual iVerilog code, each stage is encapsulated within a module (e.g. *mem_state* encapsulates the Memory stage logic). This allows for easier high-level wiring and readability that closely reflects the design paradigm. Each stage's encapsulating module contains the register bank feeding that stage and all the logic associated with that stage.
+
 ### Fetch
 
 ### Decode

@@ -1,5 +1,5 @@
 `ifndef MIPS_H
-`include "../mips.h"
+`include "mips.h"
 `endif
 
 `ifndef MEM_STAGE

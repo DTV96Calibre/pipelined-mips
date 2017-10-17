@@ -1,7 +1,7 @@
 
 
 `ifndef MIPS_H
-`include "../mips.h"
+`include "mips.h"
 `endif
 
 `ifndef ALU_CONTROL

@@ -4,7 +4,7 @@
 `define CONTROL_UNIT
 
 `ifndef MIPS_H
-`include "../mips.h"
+`include "mips.h"
 `endif
 
 `include "classify.v"

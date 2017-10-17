@@ -1,15 +1,15 @@
 `ifndef MIPS_H
-`include "../mips.h"
+`include "mips.h"
 `endif
 
 `ifndef EXECUTE_PIPELINE_REG
 `define EXECUTE_PIPELINE_REG
 
-`include "../register/pipeline_reg.v"
+`include "register/pipeline_reg.v"
 
 // This module encapsulates the entire execute pipeline register.
 module execute_pipeline_reg(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
-	ALUSrcD, RegDstD, RD1, RD2, RsD, RtD, RdD, SignImmD,
+	ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD,
 	RegWriteE, MemtoRegE, MemWriteE, ALUControlE, ALUSrcE, RegDstE,
 	RD1E, RD2E, RsE, RtE, RdE, SignImmE);
 
@@ -42,10 +42,10 @@ module execute_pipeline_reg(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUCon
 	input wire RegDstD;
 
 	// The data read from the first source register (rs).
-	input wire [31:0] RD1;
+	input wire [31:0] RD1D;
 
 	// The data read from the second source register (rt).
-	input wire [31:0] RD2;
+	input wire [31:0] RD2D;
 
 	// The first source register.
 	input wire [4:0] RsD;

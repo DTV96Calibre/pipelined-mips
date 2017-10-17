@@ -27,7 +27,7 @@ begin
         truevalr = rvalue;
     case (aluOP)
         `ALU_add: result = truevall + truevalr; // lvalue + rvalue;
-        `ALU_sub: result = trueval1 - truevalr; // lvalue - rvalue;
+        `ALU_sub: result = truevall - truevalr; // lvalue - rvalue;
         `ALU_OR:  result = truevall | truevalr; // lvalue | rvalue;
         `ALU_AND: result = truevall & truevalr; // lvalue & rvalue;
         `ALU_slt: result = truevall < truevalr; // lvalue < rvalue;

@@ -2,7 +2,7 @@
 `ifndef PIPELINE_REG
 `define PIPELINE_REG
 
-`include "register.v"
+`include "register/register.v"
 
 module pipeline_reg(clock, clear, new_value, curr_value);
 	input wire clock;

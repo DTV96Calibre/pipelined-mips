@@ -1,4 +1,4 @@
-`include "../execute_stage.v"
+`include "execute/execute_stage.v"
 
 /**
  * Tests the functionality of the execute stage of our pipelined processor.
@@ -60,7 +60,7 @@ initial begin
     ForwardAE = 0;
     ForwardBE = 0;
     clk = 0;
-
+    
     #1 clk = 1;
     #1 RegWriteD = 1;
     #1 RD1 = 32'b1110;
@@ -73,7 +73,7 @@ execute_stage EX_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD
     ResultW, ALUOutM, ForwardAE, ForwardBE, 
     WriteRegE, WriteDataE, ALUOutE);
 
-always @(*)
+always @(ALUOutE)
 begin
     $display("display ALUOutE: %h", ALUOutE);
 end

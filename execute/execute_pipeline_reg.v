@@ -5,7 +5,7 @@
 `ifndef EXECUTE_PIPELINE_REG
 `define EXECUTE_PIPELINE_REG
 
-`include "register/pipeline_reg.v"
+// `include "register/pipeline_reg.v"
 
 // This module encapsulates the entire execute pipeline register.
 module execute_pipeline_reg(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
@@ -98,25 +98,44 @@ module execute_pipeline_reg(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUCon
 	// The sign-extended immediate value.
 	output reg [31:0] SignImmE;
 
-	// 1-bit values to propagate
-	pipeline_reg_1bit reg_write(clk, FlushE, RegWriteE, RegWriteD);
-	pipeline_reg_1bit mem_to_reg(clk, FlushE, MemtoRegE, MemtoRegD);
-	pipeline_reg_1bit mem_write(clk, FlushE, MemWriteE, MemWriteD);
-	pipeline_reg_1bit alu_src(clk, FlushE, ALUSrcE, ALUSrcD);
-	pipeline_reg_1bit reg_dst(clk, FlushE, RegDstE, RegDstD);
-
-	//4-bit values to propagate
-	pipeline_reg_4bit alu_control(clk, FlushE, ALUControlE, ALUControlD);
-
-	// 5-bit values to propagate
-	pipeline_reg_5bit rs(clk, FlushE, RsE, RsD);
-	pipeline_reg_5bit rt(clk, FlushE, RtE, RtD);
-	pipeline_reg_5bit rd(clk, FlushE, RdE, RdD);
-
-	// 32-bit values to propagate
-	pipeline_reg rd1(clk, FlushE, RD1E, RD1D);
-	pipeline_reg rd2(clk, FlushE, RD2E, RD2D);
-	pipeline_reg sign_imm(clk, FlushE, SignImmE, SignImmD);
+	// One of five pipeline stages that is synchronized with the rising edge of
+ 	// the clock.
+ 	always @(posedge clk)
+ 	begin
+ 		// If the flush signal is raised by the Hazard Unit, reset all outputs.
+ 		if (FlushE)
+ 		begin
+ 			RegWriteE <= 0;
+ 			MemtoRegE <= 0;
+ 			MemWriteE <= 0;
+ 			ALUControlE <= `ALU_undef;
+ 			ALUSrcE <= 0;
+ 			RegDstE <= 0;
+ 			RD1E <= 0;
+ 			RD2E <= 0;
+ 			RsE <= 0;
+ 			RtE <= 0;
+ 			RdE <= 0;
+ 			SignImmE <= 0;
+ 		end
+ 		// Else propagate the values from the Decode stage further along the
+ 		// pipeline.
+ 		else
+ 		begin
+ 			RegWriteE <= RegWriteD;
+ 			MemtoRegE <= MemtoRegD;
+ 			MemWriteE <= MemWriteD;
+ 			ALUControlE <= ALUControlD;
+ 			ALUSrcE <= ALUSrcD;
+ 			RegDstE <= RegDstD;
+ 			RD1E <= RD1D;
+ 			RD2E <= RD2D;
+ 			RsE <= RsD;
+ 			RtE <= RtD;
+ 			RdE <= RdD;
+ 			SignImmE <= SignImmD;
+ 		end
+ 	end
 
 endmodule
 `endif

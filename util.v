@@ -35,14 +35,11 @@ endmodule
 
 module mux5_2 (input [4:0] a, b, input high_a, output [4:0] out);
   assign out = high_a ? a : b;
-  // always @(high_a) begin
-  //   $display("%m high_a=%d, out=%h", high_a, out);
-  // end
 endmodule
 
 // A = 0, B = 1, C = 2
 module mux32_3 (input [31:0] a, b, c, input[1:0] control, output [31:0] out);
-  assign out = (control == 0) ? a : (control == 1) ? b : (control == 2) ? c : `undefined;
+  assign out = (control == 0) ? a : ((control == 2'b01) ? b : ((control == 2'b10) ? c : `undefined));
 endmodule
 
 

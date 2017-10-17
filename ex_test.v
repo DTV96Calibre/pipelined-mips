@@ -13,8 +13,8 @@ reg MemWriteD;
 reg [3:0] ALUControlD;
 reg ALUSrcD;
 reg RegDstD;
-reg [31:0] RD1;
-reg [31:0] RD2;
+reg [31:0] RD1D;
+reg [31:0] RD2D;
 reg [4:0] RsD;
 reg [4:0] RtD;
 reg [4:0] RdD;
@@ -27,8 +27,6 @@ reg [1:0] ForwardBE;
 wire RegWriteE;
 wire MemtoRegE;
 wire MemWriteE;
-wire [3:0] ALUControlE;
-wire ALUSrcE;
 wire RegDstE;
 wire [31:0] RD1E;
 wire [31:0] RD2E;
@@ -46,11 +44,11 @@ initial begin
     RegWriteD = 0;
     MemtoRegD = 0;
     MemWriteD = 0;
-    ALUControlD = 4'b0010;
+    ALUControlD = 4'b0000;
     ALUSrcD = 0;
     RegDstD = 0;
-    RD1 = 32'b1;
-    RD2 = 32'b11;
+    RD1D = 32'b11;
+    RD2D = 32'b11;
     RsD = 5'b00100;
     RtD = 5'b00101;
     RdD = 5'b00110;
@@ -62,20 +60,178 @@ initial begin
     clk = 0;
     
     #1 clk = 1;
-    #1 RegWriteD = 1;
-    #1 RD1 = 32'b1110;
+
+    // Test 2-bit mux that outputs WriteRegE
+    FlushE = 0;
+    RtD = 12;
+    RdD = 16;
+    RegDstD = 0;
+    #1 clk = 0;
+    #1 clk = 1;
+    RegDstD = 1;
+    #1 clk = 0;
+    #1 clk = 1;
+    FlushE = 1;
+    #1 clk = 0;
+    #1 clk = 1;
+
+    // Test 3-bit mux that outputs WriteDataE
+    RD1D = 42;
+    ResultW = 32;
+    ALUOutM = 22;
+    ForwardBE = 0;
+    FlushE = 0;
+    #1 clk = 0;
+    #1 clk = 1;
+    ForwardBE = 1;
+    #1 clk = 0;
+    #1 clk = 1;
+    ForwardBE = 2;
+    #1 clk = 0;
+    #1 clk = 1;
+    FlushE = 1;
+    #1 clk = 0;
+    #1 clk = 1;
+
+    // Test ALU
+    FlushE = 0;
+    ALUControlD = 0; // AND
+    ForwardAE = 0;
+    ForwardBE = 0;
+    ALUSrcD = 0;
+    #1 clk = 0;
+    #1 clk = 1;
+    ForwardAE = 1;
+    ALUControlD = 1; // OR
+    #1 clk = 0;
+    #1 clk = 1;
+    ALUControlD = 2; // add
+    ForwardAE = 0;
+    ForwardBE = 1;
+    #1 clk = 0;
+    #1 clk = 1;
+    ALUControlD = 6; // sub
+    ForwardAE = 2;
+    #1 clk = 0;
+    #1 clk = 1;
+    ALUControlD = 7; // slt
+    ALUSrcD = 1;
+    ForwardBE = 2;
+    #1 clk = 0;
+    #1 clk = 1;
+
 end
 
 execute_stage EX_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
-    ALUSrcD, RegDstD, RD1, RD2, RsD, RtD, RdD, SignImmD,
-    RegWriteE, MemtoRegE, MemWriteE, ALUControlE, ALUSrcE, RegDstE,
+    ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD,
+    RegWriteE, MemtoRegE, MemWriteE, RegDstE,
     RD1E, RD2E, RsE, RtE, RdE, SignImmE,
     ResultW, ALUOutM, ForwardAE, ForwardBE, 
     WriteRegE, WriteDataE, ALUOutE);
 
-always @(ALUOutE)
+always @(negedge clk) // Check for valid test cases after logic has finished propagating with rising clock edge
 begin
-    $display("display ALUOutE: %h", ALUOutE);
+    // Test 2-bit mux that outputs WriteRegE
+    if (FlushE == 0 && RegDstD == 0)
+    begin
+        if (WriteRegE != RtD)
+            $display("TEST FAILED: WriteRegE should be %b, was actually %b.", RtE, WriteRegE);
+        else begin
+            $display("Test passed");
+        end
+    end
+
+    if (FlushE == 0 && RegDstD == 1)
+    begin
+        if (WriteRegE != RdD)
+            $display("TEST FAILED: WriteRegE should be %b, was actually %b.", RdE, WriteRegE);
+        else begin
+            $display("Test passed");
+        end
+    end
+
+    if (FlushE == 1)
+    begin
+        if (WriteRegE != 0)
+            $display("TEST FAILED: WriteRegE should be 0, was actually %b.", WriteRegE);
+        else begin
+            $display("Test passed");
+        end
+    end
+
+    // Test 3-bit mux that outputs WriteDataE
+    if (FlushE == 0 && ForwardBE == 0)
+    begin
+        if (WriteDataE != RD2D)
+            $display("TEST FAILED: WriteDataE should be %b, was actually %b.", RD2D, WriteDataE);
+        else begin
+            $display("Test passed");
+        end
+    end
+
+    if (FlushE == 0 && ForwardBE == 1)
+    begin
+        if (WriteDataE != ResultW)
+            $display("TEST FAILED: WriteDataE should be %b, was actually %b.", ResultW, WriteDataE);
+        else begin
+            $display("Test passed");
+        end
+    end
+
+    if (FlushE == 0 && ForwardBE == 2)
+    begin
+        if (WriteDataE != ALUOutM)
+            $display("bbTEST FAILED: WriteDataE should be %b, was actually %b.", ALUOutM, WriteDataE);
+        else begin
+            $display("Test passed");
+        end
+    end
+
+    // Test ALU
+    if (FlushE == 0 && ForwardAE == 0 && ForwardBE == 0 && ALUSrcD == 0 && ALUControlD == 0)
+    begin
+        if (ALUOutE != (RD1D & RD2D))
+            $display("TEST FAILED: ALUOutE should be %b, was actually %b.", (RD1D & RD2D), ALUOutE);
+        else begin
+            $display("Test passed");
+        end
+    end
+
+    if (FlushE == 0 && ForwardAE == 1 && ForwardBE == 0 && ALUSrcD == 0 && ALUControlD == 1)
+    begin
+        if (ALUOutE != (ResultW | RD2D))
+            $display("TEST FAILED: ALUOutE should be %b, was actually %b.", (ResultW | RD2D), ALUOutE);
+        else begin
+            $display("Test passed");
+        end
+    end
+
+    if (FlushE == 0 && ForwardAE == 0 && ForwardBE == 1 && ALUSrcD == 0 && ALUControlD == 2)
+    begin
+        if (ALUOutE != (RD1E + ResultW))
+            $display("TEST FAILED: ALUOutE should be %b, was actually %b.", (RD1E + ResultW), ALUOutE);
+        else begin
+            $display("Test passed");
+        end
+    end
+
+    if (FlushE == 0 && ForwardAE == 2 && ForwardBE == 1 && ALUSrcD == 0 && ALUControlD == 6)
+    begin
+        if (ALUOutE != (ALUOutM - ResultW))
+            $display("TEST FAILED: ALUOutE should be %b, was actually %b.", (ALUOutM - ResultW), ALUOutE);
+        else begin
+            $display("Test passed");
+        end
+    end
+
+    if (FlushE == 0 && ForwardAE == 2 && ForwardBE == 2 && ALUSrcD == 1 && ALUControlD == 7)
+    begin
+        if (ALUOutE != (ALUOutM < SignImmE))
+            $display("TEST FAILED: ALUOutE should be %b, was actually %b.", (ALUOutM < SignImmE), ALUOutE);
+        else begin
+            $display("Test passed");
+        end
+    end
 end
 
 endmodule

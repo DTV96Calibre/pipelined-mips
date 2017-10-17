@@ -20,8 +20,9 @@ input [3:0] aluOP;
 output reg [31:0] result;
 reg [31:0] truevall;
 reg [31:0] truevalr;
+        
 
-always @(lvalue, rvalue)
+always @(lvalue, rvalue, aluOP)
 begin
     if (lvalue == `dc32)
         truevall = 0;

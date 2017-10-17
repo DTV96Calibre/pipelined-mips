@@ -30,6 +30,12 @@ set to \`undefined (32''hxxxxxxxx) in either case.
 
 
 ## Compilation
+Each module file uses ifndef and define directives, allowing for developers to simply use the include
+directive to include code from another file. This also means that compilation can be done at the
+commandline while only referencing the primary testbench file.
+Run "iverilog *testbenchname*.v -o *outputfilename*" while at the root of the project to compile
+an executable called *outputfilename*. Due to pathing limitations with the include directive, in this
+project, any top-level testbench file to be compiled is and must be located in the root directory.
 
 ## Execution
 

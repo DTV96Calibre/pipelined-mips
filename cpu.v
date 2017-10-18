@@ -17,6 +17,7 @@ module cpu(clock);
 
     // Input from hazard unit
     wire stallf;
+    assign stallf = 0;
 
     // Outputs to decode
     wire [31:0] pc_plus_4f;
@@ -70,6 +71,8 @@ module cpu(clock);
     
     // TODO: Duplicate ResultW
     wire [31:0] ResultW;
+
+
 
     fetch fetch(
         .clk(clock),

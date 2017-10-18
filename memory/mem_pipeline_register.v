@@ -58,7 +58,7 @@ module mem_pipeline_register(clk, RegWriteE, MemtoRegE, MemWriteE, ALUOutE, Writ
 
 	// Values in the mem stage will always pass through
 	wire signal;
-	assign signal = 1;
+	assign signal = 0;
 
 	// Propagate values
 	pipeline_reg_1bit reg_write(clk, signal, RegWriteE, RegWriteM);

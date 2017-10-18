@@ -5,7 +5,11 @@ execute_test:
 	iverilog ex_test.v -o ex_test.out -I../ $(WARNS) $(VERSION)
 	./ex_test.out
 
-all: ex_test
+everything_compile:
+	echo Note: This only compiles for syntax checking.
+	iverilog everything.v -o everything.out $(WARNS) $(VERSION)
+
+all: ex_test everything_compile
 
 clean:
 	rm ex_test.out

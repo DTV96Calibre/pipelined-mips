@@ -184,7 +184,7 @@ begin
     if (FlushE == 0 && ForwardBE == 2)
     begin
         if (WriteDataE != ALUOutM)
-            $display("zTEST FAILED: WriteDataE should be %b, was actually %b.", ALUOutM, WriteDataE);
+            $display("TEST FAILED: WriteDataE should be %b, was actually %b.", ALUOutM, WriteDataE);
         else begin
             $display("Test passed");
         end

@@ -12,11 +12,12 @@
 
 `ifndef ALU
 `define ALU
-module alu(lvalue, rvalue, aluOP, result);
+module alu(lvalue, rvalue, aluOP, shamt, result);
 
 input [31:0] lvalue;
 input [31:0] rvalue;
 input [3:0] aluOP;
+input [4:0] shamt;
 output reg [31:0] result;
 reg [31:0] truevall;
 reg [31:0] truevalr;
@@ -38,6 +39,8 @@ begin
         `ALU_OR:  result = truevall | truevalr; // lvalue | rvalue;
         `ALU_AND: result = truevall & truevalr; // lvalue & rvalue;
         `ALU_slt: result = truevall < truevalr; // lvalue < rvalue;
+        `ALU_sll: result = truevall << shamt;
+        `ALU_sra: result = truevall >>> shamt;
         `ALU_undef: result = `dc32;
     endcase
 end

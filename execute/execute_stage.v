@@ -12,8 +12,8 @@
 // This module encapsulates the entire execute stage.
 module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 	ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD,
-	RegWriteE, MemtoRegE, MemWriteE, RegDstE,
-	RD1E, RD2E, RsE, RtE, RdE, SignImmE,
+	RegWriteE, MemtoRegE, MemWriteE, RegDstE, ALUControlE,
+	RD1E, RD2E, RsE, RtE, RdE, SignImmE, shamtD, 
 	ResultW, ALUOutM, ForwardAE, ForwardBE,
 	WriteRegE, WriteDataE, ALUOutE);
 
@@ -90,7 +90,7 @@ module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 	output wire MemWriteE;
 
 	// The four-bit ALU op denoting which operation the ALU should perform.
-	wire [3:0] ALUControlE;
+	output wire [3:0] ALUControlE;
 
 	// The control signal denoting whether the ALU input is an immediate value.
 	wire ALUSrcE;
@@ -116,6 +116,8 @@ module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 	// The sign-extended immediate value.
 	output wire [31:0] SignImmE;
 
+    // The shift amount value
+    input wire [4:0] shamtD;
 	/*** The following outputs are generated internal to the execute stage ***/
 
 	// The 5-bit register code that will be written to.
@@ -130,22 +132,25 @@ module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 	// The 32-bit RHS of the ALU operation to perform.
 	wire [31:0] SrcBE; // Note: Not a top-level output from the EX stage
 
+    // The execute stage's shift immediate value
+    wire [4:0] shamtE;
+
 	// The 32-bit output from the ALU.
 	output wire [31:0] ALUOutE;
 
 	// Instantiate all muxes, the ALU, and the EX pipeline register
 
 	execute_pipeline_reg EX_pipeline_reg(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD,
-		ALUControlD, ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD,
+		ALUControlD, ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD, shamtD,
 		RegWriteE, MemtoRegE, MemWriteE, ALUControlE, ALUSrcE, RegDstE,
-		RD1E, RD2E, RsE, RtE, RdE, SignImmE);
+		RD1E, RD2E, RsE, RtE, RdE, SignImmE, shamtE);
 
 	mux5_2 write_reg_mux(RdE, RtE, RegDstE, WriteRegE);
 	mux32_3 write_data_mux(RD2E, ResultW, ALUOutM, ForwardBE, WriteDataE);
 	mux32_3 srcA_mux(RD1E, ResultW, ALUOutM, ForwardAE, SrcAE);
 	mux32_2 srcB_mux(SignImmE, WriteDataE, ALUSrcE, SrcBE);
 
-	alu myALU(SrcAE, SrcBE, ALUControlE, ALUOutE);
+	alu myALU(SrcAE, SrcBE, ALUControlE, shamtE, ALUOutE);
 
 endmodule
 `endif

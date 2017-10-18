@@ -1,0 +1,1 @@
+iverilog fetch.v add.v mem.v mux.v pc.v	-o test

@@ -1,0 +1,135 @@
+#! /usr/remote/bin/vvp
+:ivl_version "10.1 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0x233da30 .scope module, "test" "test" 2 20;
+ .timescale 0 0;
+v0x2369350_0 .var "clk", 0 0;
+v0x2369460_0 .net "instructionf", 31 0, L_0x2379d10;  1 drivers
+v0x2369570_0 .net "pc_plus_4f", 31 0, L_0x23696d0;  1 drivers
+v0x2369610_0 .net "testr", 0 0, L_0x237a000;  1 drivers
+L_0x237a000 .part L_0x2379d10, 0, 1;
+S_0x233e550 .scope module, "f" "fetch" 2 28, 2 1 0, S_0x233da30;
+ .timescale 0 0;
+    .port_info 0 /INPUT 32 "pc_branch_d"
+    .port_info 1 /INPUT 1 "pcsrc_d"
+    .port_info 2 /INPUT 1 "stallf"
+    .port_info 3 /INPUT 1 "clk"
+    .port_info 4 /OUTPUT 32 "pc_plus_4f"
+    .port_info 5 /OUTPUT 32 "instructionf"
+v0x2368c00_0 .net "clk", 0 0, v0x2369350_0;  1 drivers
+v0x2368cc0_0 .net "cur_count", 31 0, v0x23688d0_0;  1 drivers
+v0x2368d60_0 .net "instructionf", 31 0, L_0x2379d10;  alias, 1 drivers
+v0x2368e60_0 .net "next_count", 31 0, L_0x237a130;  1 drivers
+L_0x7fa014ef40f0 .functor BUFT 1, C4<00000000000000000000000000000001>, C4<0>, C4<0>, C4<0>;
+v0x2368f50_0 .net "pc_branch_d", 31 0, L_0x7fa014ef40f0;  1 drivers
+v0x2369060_0 .net "pc_plus_4f", 31 0, L_0x23696d0;  alias, 1 drivers
+L_0x7fa014ef4138 .functor BUFT 1, C4<0>, C4<0>, C4<0>, C4<0>;
+v0x2369150_0 .net "pcsrc_d", 0 0, L_0x7fa014ef4138;  1 drivers
+L_0x7fa014ef4180 .functor BUFT 1, C4<0>, C4<0>, C4<0>, C4<0>;
+v0x23691f0_0 .net "stallf", 0 0, L_0x7fa014ef4180;  1 drivers
+S_0x233e150 .scope module, "ad1" "adder" 2 12, 3 7 0, S_0x233e550;
+ .timescale 0 0;
+    .port_info 0 /INPUT 32 "left"
+    .port_info 1 /INPUT 32 "right"
+    .port_info 2 /OUTPUT 32 "result"
+v0x233e8a0_0 .net "left", 31 0, v0x23688d0_0;  alias, 1 drivers
+v0x23671a0_0 .net "result", 31 0, L_0x23696d0;  alias, 1 drivers
+L_0x7fa014ef4018 .functor BUFT 1, C4<00000000000000000000000000000100>, C4<0>, C4<0>, C4<0>;
+v0x2367280_0 .net "right", 31 0, L_0x7fa014ef4018;  1 drivers
+L_0x23696d0 .arith/sum 32, v0x23688d0_0, L_0x7fa014ef4018;
+S_0x23673f0 .scope module, "mem" "memory" 2 15, 4 1 0, S_0x233e550;
+ .timescale 0 0;
+    .port_info 0 /INPUT 32 "readAddress"
+    .port_info 1 /OUTPUT 32 "memInstruction"
+L_0x2379d10 .functor BUFZ 32, L_0x2369770, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>;
+v0x2367600_0 .net *"_s0", 31 0, L_0x2369770;  1 drivers
+v0x2367700_0 .net *"_s10", 31 0, L_0x2379be0;  1 drivers
+v0x23677e0_0 .net *"_s2", 31 0, L_0x2379a70;  1 drivers
+v0x23678d0_0 .net *"_s4", 29 0, L_0x2379970;  1 drivers
+L_0x7fa014ef4060 .functor BUFT 1, C4<00>, C4<0>, C4<0>, C4<0>;
+v0x23679b0_0 .net *"_s6", 1 0, L_0x7fa014ef4060;  1 drivers
+L_0x7fa014ef40a8 .functor BUFT 1, C4<00000000000100000000000000000000>, C4<0>, C4<0>, C4<0>;
+v0x2367ae0_0 .net/2s *"_s8", 31 0, L_0x7fa014ef40a8;  1 drivers
+v0x2367bc0 .array "mem", 1052672 1048576, 31 0;
+v0x2367c80_0 .net "memInstruction", 31 0, L_0x2379d10;  alias, 1 drivers
+v0x2367d60_0 .net "readAddress", 31 0, v0x23688d0_0;  alias, 1 drivers
+L_0x2369770 .array/port v0x2367bc0, L_0x2379be0;
+L_0x2379970 .part v0x23688d0_0, 2, 30;
+L_0x2379a70 .concat [ 30 2 0 0], L_0x2379970, L_0x7fa014ef4060;
+L_0x2379be0 .arith/sub 32, L_0x2379a70, L_0x7fa014ef40a8;
+S_0x2367ef0 .scope module, "mux1" "mux_two" 2 13, 5 1 0, S_0x233e550;
+ .timescale 0 0;
+    .port_info 0 /INPUT 32 "first"
+    .port_info 1 /INPUT 32 "second"
+    .port_info 2 /INPUT 1 "flag"
+    .port_info 3 /OUTPUT 32 "signal"
+L_0x237a130 .functor BUFT 32, L_0x23696d0, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>;
+v0x2368140_0 .net "first", 31 0, L_0x7fa014ef40f0;  alias, 1 drivers
+v0x2368200_0 .net "flag", 0 0, L_0x7fa014ef4138;  alias, 1 drivers
+v0x23682c0_0 .net "second", 31 0, L_0x23696d0;  alias, 1 drivers
+v0x23683c0_0 .net "signal", 31 0, L_0x237a130;  alias, 1 drivers
+S_0x2368530 .scope module, "pc" "program_counter" 2 11, 6 1 0, S_0x233e550;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "clock"
+    .port_info 1 /INPUT 1 "stallf"
+    .port_info 2 /INPUT 32 "next_count"
+    .port_info 3 /OUTPUT 32 "cur_count"
+v0x23687f0_0 .net "clock", 0 0, v0x2369350_0;  alias, 1 drivers
+v0x23688d0_0 .var "cur_count", 31 0;
+v0x23689e0_0 .net "next_count", 31 0, L_0x237a130;  alias, 1 drivers
+v0x2368ab0_0 .net "stallf", 0 0, L_0x7fa014ef4180;  alias, 1 drivers
+E_0x2368770 .event posedge, v0x23687f0_0;
+    .scope S_0x2368530;
+T_0 ;
+    %wait E_0x2368770;
+    %load/vec4 v0x2368ab0_0;
+    %pad/u 32;
+    %cmpi/e 0, 0, 32;
+    %jmp/0xz  T_0.0, 4;
+    %load/vec4 v0x23689e0_0;
+    %assign/vec4 v0x23688d0_0, 0;
+T_0.0 ;
+    %jmp T_0;
+    .thread T_0;
+    .scope S_0x2368530;
+T_1 ;
+    %pushi/vec4 4194304, 0, 32;
+    %assign/vec4 v0x23688d0_0, 0;
+    %end;
+    .thread T_1;
+    .scope S_0x23673f0;
+T_2 ;
+    %vpi_call 4 6 "$readmemh", "../mips_processor/mips_code/add_test.v", v0x2367bc0 {0 0 0};
+    %end;
+    .thread T_2;
+    .scope S_0x233da30;
+T_3 ;
+    %delay 10, 0;
+    %load/vec4 v0x2369350_0;
+    %inv;
+    %store/vec4 v0x2369350_0, 0, 1;
+    %jmp T_3;
+    .thread T_3;
+    .scope S_0x233da30;
+T_4 ;
+    %vpi_call 2 33 "$dumpfile", "test.vcd" {0 0 0};
+    %vpi_call 2 34 "$dumpvars", 32'sb00000000000000000000000000000000, S_0x233da30 {0 0 0};
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x2369350_0, 0, 1;
+    %vpi_call 2 36 "$monitor", "The current instruction is %h", v0x2369460_0 {0 0 0};
+    %end;
+    .thread T_4;
+# The file index is used to find the file name in the following table.
+:file_names 7;
+    "N/A";
+    "<interactive>";
+    "fetch.v";
+    "add.v";
+    "mem.v";
+    "mux.v";
+    "pc.v";

@@ -120,7 +120,6 @@ module cpu(clock);
         .jump_address(pc_branch_d)
         );
 
-
     execute_stage EX_stage(
         .clk(clock),
     

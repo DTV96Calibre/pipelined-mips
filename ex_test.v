@@ -28,6 +28,7 @@ wire RegWriteE;
 wire MemtoRegE;
 wire MemWriteE;
 wire RegDstE;
+wire [3:0] ALUControlE;
 wire [31:0] RD1E;
 wire [31:0] RD2E;
 wire [4:0] RsE;
@@ -127,7 +128,7 @@ end
 
 execute_stage EX_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
     ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD,
-    RegWriteE, MemtoRegE, MemWriteE, RegDstE,
+    RegWriteE, MemtoRegE, MemWriteE, RegDstE, ALUControlE,
     RD1E, RD2E, RsE, RtE, RdE, SignImmE,
     ResultW, ALUOutM, ForwardAE, ForwardBE, 
     WriteRegE, WriteDataE, ALUOutE);
@@ -191,25 +192,25 @@ begin
     end
 
     // Test ALU
-    if (FlushE == 0 && ForwardAE == 0 && ForwardBE == 0 && ALUSrcD == 0 && ALUControlD == 0)
+    if (FlushE == 0 && ForwardAE == 0 && ForwardBE == 0 && ALUControlE == 0)
     begin
-        if (ALUOutE != (RD1D & RD2D))
+        if (ALUOutE != (RD1E & RD2E))
             $display("TEST FAILED: ALUOutE should be %b, was actually %b.", (RD1D & RD2D), ALUOutE);
         else begin
             $display("Test passed");
         end
     end
 
-    if (FlushE == 0 && ForwardAE == 1 && ForwardBE == 0 && ALUSrcD == 0 && ALUControlD == 1)
+    if (FlushE == 0 && ForwardAE == 1 && ForwardBE == 0 && ALUControlE == 1)
     begin
-        if (ALUOutE != (ResultW | RD2D))
+        if (ALUOutE != (ResultW | RD2E))
             $display("TEST FAILED: ALUOutE should be %b, was actually %b.", (ResultW | RD2D), ALUOutE);
         else begin
             $display("Test passed");
         end
     end
 
-    if (FlushE == 0 && ForwardAE == 0 && ForwardBE == 1 && ALUSrcD == 0 && ALUControlD == 2)
+    if (FlushE == 0 && ForwardAE == 0 && ForwardBE == 1 && ALUControlE == 2)
     begin
         if (ALUOutE != (RD1E + ResultW))
             $display("TEST FAILED: ALUOutE should be %b, was actually %b.", (RD1E + ResultW), ALUOutE);
@@ -218,7 +219,7 @@ begin
         end
     end
 
-    if (FlushE == 0 && ForwardAE == 2 && ForwardBE == 1 && ALUSrcD == 0 && ALUControlD == 6)
+    if (FlushE == 0 && ForwardAE == 2 && ForwardBE == 1 && ALUControlE == 6)
     begin
         if (ALUOutE != (ALUOutM - ResultW))
             $display("TEST FAILED: ALUOutE should be %b, was actually %b.", (ALUOutM - ResultW), ALUOutE);
@@ -227,7 +228,7 @@ begin
         end
     end
 
-    if (FlushE == 0 && ForwardAE == 2 && ForwardBE == 2 && ALUSrcD == 1 && ALUControlD == 7)
+    if (FlushE == 0 && ForwardAE == 2 && ForwardBE == 2 && ALUControlE == 7)
     begin
         if (ALUOutE != (ALUOutM < SignImmE))
             $display("TEST FAILED: ALUOutE should be %b, was actually %b.", (ALUOutM < SignImmE), ALUOutE);

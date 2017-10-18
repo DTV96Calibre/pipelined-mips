@@ -72,7 +72,7 @@ module execute_pipeline_reg(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUCon
 	output wire MemWriteE;
 
 	// The four-bit ALU op denoting which operation the ALU should perform.
-	output wire [3:0] ALUControlE;
+	output reg [3:0] ALUControlE;
 
 	// The control signal denoting whether the ALU input is an immediate value.
 	output wire ALUSrcE;
@@ -105,9 +105,6 @@ module execute_pipeline_reg(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUCon
  	pipeline_reg_1bit alu_src(clk, !FlushE, ALUSrcD, ALUSrcE);
  	pipeline_reg_1bit reg_dst(clk, !FlushE, RegDstD, RegDstE);
  
- 	//4-bit values to propagate
- 	pipeline_reg_4bit alu_control(clk, !FlushE, ALUControlD, ALUControlE);
- 
  	// 5-bit values to propagate
  	pipeline_reg_5bit rs(clk, !FlushE, RsD, RsE);
  	pipeline_reg_5bit rt(clk, !FlushE, RtD, RtE);
@@ -117,6 +114,17 @@ module execute_pipeline_reg(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUCon
  	pipeline_reg rd1(clk, !FlushE, RD1D, RD1E);
  	pipeline_reg rd2(clk, !FlushE, RD2D, RD2E);
  	pipeline_reg sign_imm(clk, !FlushE, SignImmD, SignImmE);
+
+ 	// pipeline_reg_4bit alu_control(clk, !FlushE, ALUControlD, ALUControlE);
+
+ 	always @(*)
+ 	begin
+ 		if (FlushE)
+ 			ALUControlE <= 0;
+ 		else begin
+ 			ALUControlE <= ALUControlD;
+ 		end
+ 	end
 
 endmodule
 `endif

@@ -12,7 +12,7 @@
 // This module encapsulates the entire execute stage.
 module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 	ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD,
-	RegWriteE, MemtoRegE, MemWriteE, RegDstE,
+	RegWriteE, MemtoRegE, MemWriteE, RegDstE, ALUControlE,
 	RD1E, RD2E, RsE, RtE, RdE, SignImmE,
 	ResultW, ALUOutM, ForwardAE, ForwardBE,
 	WriteRegE, WriteDataE, ALUOutE);
@@ -90,7 +90,7 @@ module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 	output wire MemWriteE;
 
 	// The four-bit ALU op denoting which operation the ALU should perform.
-	wire [3:0] ALUControlE;
+	output wire [3:0] ALUControlE;
 
 	// The control signal denoting whether the ALU input is an immediate value.
 	wire ALUSrcE;

@@ -4,9 +4,9 @@
 `ifndef DECODE_STAGE
 `define DECODE_STAGE
 
-`include "decoder.v"
-`include "control_unit.v"
-`include "jump_unit.v"
+`include "decode/decoder.v"
+`include "decode/control_unit.v"
+`include "decode/jump_unit.v"
 
 
 module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback_id, reg_write_W,

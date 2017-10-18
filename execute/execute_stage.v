@@ -141,7 +141,7 @@ module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 	// Instantiate all muxes, the ALU, and the EX pipeline register
 
 	execute_pipeline_reg EX_pipeline_reg(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD,
-		ALUControlD, ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD, shamtD
+		ALUControlD, ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD, shamtD,
 		RegWriteE, MemtoRegE, MemWriteE, ALUControlE, ALUSrcE, RegDstE,
 		RD1E, RD2E, RsE, RtE, RdE, SignImmE, shamtE);
 

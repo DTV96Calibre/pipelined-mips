@@ -19,7 +19,7 @@ reg [4:0] RsD;
 reg [4:0] RtD;
 reg [4:0] RdD;
 reg [31:0] SignImmD;
-reg shamtD;
+reg [4:0] shamtD;
 reg [31:0] ResultW;
 reg [31:0] ALUOutM;
 reg [1:0] ForwardAE;

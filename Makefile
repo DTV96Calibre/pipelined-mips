@@ -9,7 +9,7 @@ everything_compile:
 	echo Note: This only compiles for syntax checking.
 	iverilog everything.v -o everything.out $(WARNS) $(VERSION)
 
-all: ex_test everything_compile
+all: everything_compile
 
 clean:
 	rm ex_test.out

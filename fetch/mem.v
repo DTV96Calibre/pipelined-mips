@@ -1,3 +1,8 @@
+
+`ifndef FETCH_MEM_H
+`define FETCH_MEM_H
+
+
 module memory(readAddress, memInstruction);
 input [31:0] readAddress; 
 output [31:0] memInstruction;
@@ -14,3 +19,6 @@ begin
   //$display("readAddress: %x", readAddress);
 end*/
 endmodule
+
+
+`endif

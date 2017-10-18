@@ -16,4 +16,4 @@ testbench:
 	./testbench.out
 
 clean:
-	rm ex_test.out
+	rm *.out *.dump

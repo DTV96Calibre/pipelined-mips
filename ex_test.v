@@ -39,6 +39,9 @@ wire [31:0] WriteDataE;
 wire [31:0] ALUOutE;
 
 initial begin
+    $dumpfile("execute.dump");
+    $dumpvars;
+
     // Init 'inputs'
     FlushE = 0;
     RegWriteD = 0;
@@ -134,16 +137,16 @@ begin
     // Test 2-bit mux that outputs WriteRegE
     if (FlushE == 0 && RegDstD == 0)
     begin
-        if (WriteRegE != RtD)
+        if (WriteRegE != RtE)
             $display("TEST FAILED: WriteRegE should be %b, was actually %b.", RtE, WriteRegE);
         else begin
             $display("Test passed");
         end
     end
 
-    if (FlushE == 0 && RegDstD == 1)
+    if (FlushE == 0 && RegDstE == 1)
     begin
-        if (WriteRegE != RdD)
+        if (WriteRegE != RdE)
             $display("TEST FAILED: WriteRegE should be %b, was actually %b.", RdE, WriteRegE);
         else begin
             $display("Test passed");
@@ -162,8 +165,8 @@ begin
     // Test 3-bit mux that outputs WriteDataE
     if (FlushE == 0 && ForwardBE == 0)
     begin
-        if (WriteDataE != RD2D)
-            $display("TEST FAILED: WriteDataE should be %b, was actually %b.", RD2D, WriteDataE);
+        if (WriteDataE != RD2E)
+            $display("TEST FAILED: WriteDataE should be %b, was actually %b.", RD2E, WriteDataE);
         else begin
             $display("Test passed");
         end
@@ -181,7 +184,7 @@ begin
     if (FlushE == 0 && ForwardBE == 2)
     begin
         if (WriteDataE != ALUOutM)
-            $display("bbTEST FAILED: WriteDataE should be %b, was actually %b.", ALUOutM, WriteDataE);
+            $display("zTEST FAILED: WriteDataE should be %b, was actually %b.", ALUOutM, WriteDataE);
         else begin
             $display("Test passed");
         end

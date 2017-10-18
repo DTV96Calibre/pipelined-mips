@@ -7,8 +7,8 @@
 `include "mips.h"
 `endif
 
-`include "classify.v"
-`include "alu_control.v"
+`include "decode/classify.v"
+`include "decode/alu_control.v"
 
 module control_unit(opcode, funct, is_r_type, reg_write, mem_to_reg, mem_write, alu_op, alu_src, reg_dest, branch, jump, jump_reg, jump_link);
 

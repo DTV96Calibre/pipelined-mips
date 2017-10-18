@@ -1,3 +1,6 @@
+`ifndef PC_V
+`define PC_V
+
 module program_counter(clock, stallf, next_count, cur_count);
 input [31:0] next_count;
 input stallf;
@@ -13,3 +16,5 @@ begin
     cur_count <= 32'h00400000;
 end
 endmodule
+
+`endif

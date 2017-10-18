@@ -1,3 +1,12 @@
+
+`ifndef FETCH_V
+`define FETCH_V
+
+`include "fetch/mux.v"
+`include "fetch/pc.v"
+`include "util.v"
+`include "fetch/mem.v"
+
 module fetch(pc_branch_d, pcsrc_d, stallf, clk, pc_plus_4f, instructionf);
 input [31:0] pc_branch_d;
 input pcsrc_d;
@@ -15,25 +24,6 @@ mux_two mux1(pc_branch_d, pc_plus_4f, pcsrc_d, next_count);
 memory mem(cur_count, instructionf);
 
 endmodule
-//unit test
-/*
-`include "../mips.h"
-module test;
-wire [31:0] pc_plus_4f;
-wire [31:0] instructionf;
-reg clk;
-always
-begin
-    #10 clk = ~clk;
-end
-fetch f(1, 1'b0, 1'b0, clk, pc_plus_4f, instructionf);
-assign testr = instructionf;
-//test code here
-initial
-begin
-    $dumpfile("test.vcd");
-    $dumpvars(0,test);
-    clk = 0;
-    $monitor("The current instruction is %h", instructionf);
-end
-endmodule*/
+`endif
+
+

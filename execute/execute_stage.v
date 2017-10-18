@@ -14,7 +14,7 @@ module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 	ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD,
 	RegWriteE, MemtoRegE, MemWriteE, RegDstE,
 	RD1E, RD2E, RsE, RtE, RdE, SignImmE,
-	ResultW, ALUOutM, ForwardAE, ForwardBE, 
+	ResultW, ALUOutM, ForwardAE, ForwardBE,
 	WriteRegE, WriteDataE, ALUOutE);
 
 	// The clock.
@@ -135,7 +135,7 @@ module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 
 	// Instantiate all muxes, the ALU, and the EX pipeline register
 
-	execute_pipeline_reg EX_pipeline_reg(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, 
+	execute_pipeline_reg EX_pipeline_reg(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD,
 		ALUControlD, ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD,
 		RegWriteE, MemtoRegE, MemWriteE, ALUControlE, ALUSrcE, RegDstE,
 		RD1E, RD2E, RsE, RtE, RdE, SignImmE);
@@ -145,7 +145,7 @@ module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 	mux32_3 srcA_mux(RD1E, ResultW, ALUOutM, ForwardAE, SrcAE);
 	mux32_2 srcB_mux(SignImmE, WriteDataE, ALUSrcE, SrcBE);
 
-	alu myALU(SrcAE, SrcBE, ALUControlE, ALUOutD);
+	alu myALU(SrcAE, SrcBE, ALUControlE, ALUOutE);
 
 endmodule
 `endif

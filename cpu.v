@@ -1,6 +1,6 @@
 
-`ifndef EVERYTHING_V
-`define EVERYTHING_V
+`ifndef CPU_V
+`define CPU_V
 
 `include "execute/execute_stage.v"
 `include "decode/decode_stage.v"
@@ -185,4 +185,3 @@ module cpu(clock);
 endmodule
 
 `endif
-

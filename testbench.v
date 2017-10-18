@@ -18,7 +18,7 @@ cpu myCPU(clock);
 
 always @(*)
 begin
-    #1 clock = ~clock;
+    #1 clock <= ~clock;
 end
 
 endmodule

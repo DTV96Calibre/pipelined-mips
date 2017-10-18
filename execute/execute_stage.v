@@ -11,9 +11,9 @@
 
 // This module encapsulates the entire execute stage.
 module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
-	ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD,
+	ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD, shamtD,
 	RegWriteE, MemtoRegE, MemWriteE, RegDstE, ALUControlE,
-	RD1E, RD2E, RsE, RtE, RdE, SignImmE, shamtD, 
+	RD1E, RD2E, RsE, RtE, RdE, SignImmE, 
 	ResultW, ALUOutM, ForwardAE, ForwardBE,
 	WriteRegE, WriteDataE, ALUOutE);
 
@@ -62,6 +62,9 @@ module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 
 	// The sign-extended immediate value.
 	input wire [31:0] SignImmD;
+
+	// The shift amount value
+    input wire [4:0] shamtD;
 
 	/*** The following inputs are fed from elsewhere ***/
 
@@ -116,8 +119,6 @@ module execute_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
 	// The sign-extended immediate value.
 	output wire [31:0] SignImmE;
 
-    // The shift amount value
-    input wire [4:0] shamtD;
 	/*** The following outputs are generated internal to the execute stage ***/
 
 	// The 5-bit register code that will be written to.

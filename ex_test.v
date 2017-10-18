@@ -19,6 +19,7 @@ reg [4:0] RsD;
 reg [4:0] RtD;
 reg [4:0] RdD;
 reg [31:0] SignImmD;
+reg shamtD;
 reg [31:0] ResultW;
 reg [31:0] ALUOutM;
 reg [1:0] ForwardAE;
@@ -57,6 +58,7 @@ initial begin
     RtD = 5'b00101;
     RdD = 5'b00110;
     SignImmD = 32'b0;
+    shamtD = 0;
     ResultW = 32'b111;
     ALUOutM = 32'b10;
     ForwardAE = 0;
@@ -127,7 +129,7 @@ initial begin
 end
 
 execute_stage EX_stage(clk, FlushE, RegWriteD, MemtoRegD, MemWriteD, ALUControlD,
-    ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD,
+    ALUSrcD, RegDstD, RD1D, RD2D, RsD, RtD, RdD, SignImmD, shamtD,
     RegWriteE, MemtoRegE, MemWriteE, RegDstE, ALUControlE,
     RD1E, RD2E, RsE, RtE, RdE, SignImmE,
     ResultW, ALUOutM, ForwardAE, ForwardBE, 

@@ -8,7 +8,7 @@
 
 
 module mem_test;
-  reg clk, RegWriteE, MemtoRegE, MemWriteE = 0;
+  reg clk=0, RegWriteE, MemtoRegE, MemWriteE = 0;
   reg [31:0] ALUOutE, WriteDataE = 0;
   reg [4:0] WriteRegE = 1;
   wire [31:0] ALUOutM, WriteDataM;
@@ -29,6 +29,7 @@ module mem_test;
     MemWriteE = 1;
     ALUOutE = 32'h000401;
     WriteDataE = 32'h000001;
+    #1 clk = 1; #1 clk = 0;
     #1 clk = 1; #1 clk = 0;
     MemWriteE = 0;
     #1 clk = 1; #1 clk = 0;
@@ -68,15 +69,11 @@ module mem_test;
     end
 
     // Test read/write to unallocated (shoud print 2 errors)
-    MemWriteE = 1;
-    ALUOutE = 32'h000401;
-    WriteDataE = 32'h000001;
-    #1 clk = 1; #1 clk = 0;
-    MemWriteE = 0;
-    #1 clk = 1; #1 clk = 0;
+    ALUOutE = 32'h000402;
     MemtoRegE = 0;
     #1 clk = 1; #1 clk = 0;
-    if (RD == `undefined) begin
+    #1 clk = 1; #1 clk = 0;
+    if (RD === `undefined) begin
       $display("Success: Read undefined from unallocated segment");
     end else begin
       $display("Failure: Unallocated Memory @%h: %h", ALUOutE, RD);

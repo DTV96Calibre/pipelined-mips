@@ -6,7 +6,7 @@
 `include "decode/decode_stage.v"
 `include "fetch/fetch.v"
 `include "memory/mem_stage.v"
-
+`include "register/fetch_pipeline_reg.v"
 module cpu(clock);
 
     input wire clock;
@@ -18,11 +18,13 @@ module cpu(clock);
     // Input from hazard unit
     wire stallf;
     assign stallf = 0;
-
+    assign FlushE = 0;
     // Outputs to decode
     wire [31:0] pc_plus_4f;
+    wire [31:0} pc_plus_4d;
     wire [31:0] instructionf;
-    
+    wire [31:0] instructiond;
+
     wire FlushE;
     wire RegWriteD;
     wire MemtoRegD;
@@ -88,13 +90,20 @@ module cpu(clock);
         .pc_plus_4f(pc_plus_4f),
         .instructionf(instructionf)
         );
+     fetch_pipeline_reg(
+       .clock(clock)
+     , .clear(0)
+     , pc_plus_four_F(pc_plus4f)
+     , instruction_F(instructionf)
+     , .pc_plus_four_D(pc_plus_4d)
+     , instruction_D(instructiond));
 
     decode_stage decode(
         .clock(clock),
             
         // Inputs from fetch.
-        .instruction(instructionf),
-        .pc_plus_four(pc_plus_4f), 
+        .instruction(instructiond),
+        .pc_plus_four(pc_plus_4d), 
     
         // Inputs from writeback.
         .writeback_value(Writeback_RD), 

@@ -10,11 +10,14 @@
 `include "decode/classify.v"
 `include "decode/alu_control.v"
 
-module control_unit(opcode, funct, is_r_type, reg_write, mem_to_reg, mem_write, alu_op, alu_src, reg_dest, branch, jump, jump_reg, jump_link);
+module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write, mem_to_reg, mem_write, alu_op, alu_src, reg_dest, branch, jump, jump_reg, jump_link);
 
 	input wire [5:0] opcode;
 	input wire [5:0] funct;
 	
+	// This register ID is used like a funct for opcode 0 (called REGIMM)
+	input wire [4:0] reg_rt_id;
+
 	// Used by the decoder.
 	output wire is_r_type;
 
@@ -43,7 +46,7 @@ module control_unit(opcode, funct, is_r_type, reg_write, mem_to_reg, mem_write, 
 	assign branch =
 		(opcode == `BNE) |
 		(opcode == `BEQ) |
-		(opcode == `BLTZ);
+		((opcode == `REGIMM) & (reg_rt_id == `BLTZ));
 	
 	assign jump =
 		(opcode == `J) |

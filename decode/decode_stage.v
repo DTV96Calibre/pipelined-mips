@@ -89,6 +89,7 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	control_unit control(
 		.opcode (opcode),
 		.funct (funct),
+		.reg_rt_id (reg_rt_id),
 		.is_r_type (is_r_type),
 		.reg_write (reg_write_D),
 		.mem_to_reg (mem_to_reg),

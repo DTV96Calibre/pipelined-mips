@@ -128,7 +128,7 @@ module decoder(clock, instruction, pc_plus_four, writeback_value,
 	// Decide which rs, rt, and rd ID values to output based on whether
 	// the current instruction is I-type.
 	assign reg_rs_id = is_r_type ? r_type_rs : i_type_rs;
-	assign reg_rt_id = is_r_type ? r_type_rt : 0;
+	assign reg_rt_id = is_r_type ? r_type_rt : i_type_rd;
 	assign reg_rd_id = is_r_type ? r_type_rd : i_type_rd;
 
 	// This module contains the register file. Writeback happens at

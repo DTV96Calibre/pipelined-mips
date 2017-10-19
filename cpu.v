@@ -18,20 +18,14 @@ module cpu(clock);
     wire pc_src_d;
 
     // Input from hazard unit
-    wire stallf;
-    assign stallf = 0;
-    
+    wire StallF;
+    wire StallD;
+
     wire FlushE;
-    assign FlushE = 1;	// NOTE: FlushE = 1 is NO FLUSH, =0 is FLUSH
-    
-    
+     
     wire [1:0] ForwardAE;
     wire [1:0] ForwardBE;
-    assign ForwardAE = 0;
-    assign ForwardBE = 0;
     
-    
-
     // Outputs to decode
     wire [31:0] pc_plus_4f;
     wire [31:0] pc_plus_4d;
@@ -110,7 +104,7 @@ module cpu(clock);
         .pcsrc_d(pc_src_d),
         
         // Inputs from the hazard unit.
-        .stallf(stallf),
+        .stallf(StallF),
 
         // Outputs to the decode stage.
         .pc_plus_4f(pc_plus_4f),
@@ -135,7 +129,7 @@ module cpu(clock);
         .writeback_value(ResultW), 
         .writeback_id(WriteRegW), 
         .reg_write_W(RegWriteW),
-    
+
         // Decode to EX.
         .reg_rs_value(RD1D),
         .reg_rt_value(RD2D),
@@ -256,7 +250,14 @@ module cpu(clock);
 	.RegWriteM(RegWriteM),
 	.WriteRegW(WriteRegW),
 	.RegWriteW(RegWriteW),
-	.syscallD(syscallD)
+	.syscallD(syscallD),
+
+	// Outputs
+	.StallF(StallF),
+	.StallD(StallD),
+	.FlushE(FlushE),
+	.ForwardAE(ForwardAE),
+	.ForwardBE(ForwardBE)
 	);
 
 

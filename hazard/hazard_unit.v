@@ -11,7 +11,7 @@ module hazard_unit(
 	MemtoRegM, RegWriteM, WriteRegW, RegWriteW, syscallD,
 
 	// Outputs
-	StallF, StallD, ForwardAD, ForwardBD, FlushE, ForwardAE, ForwardBE
+	StallF, StallD, FlushE, ForwardAE, ForwardBE
 	);
 
 /* Inputs */
@@ -67,10 +67,10 @@ output wire StallF;
 output wire StallD;
 
 // True when forwarding a predicted branch to the Decode stage source reg Rs.
-output wire ForwardAD;
+//output wire ForwardAD;
 
 // True when forwarding a predicted branch to the Decode stage source reg Rt.
-output wire ForwardBD;
+//output wire ForwardBD;
 
 // True when the Execute stage needs to be flushed.
 output wire FlushE;
@@ -120,8 +120,8 @@ initial begin
 end
 */
 // Execute to Decode forwarding (for branches)
-assign ForwardAD = (RsD != 0) && (RsD == WriteRegM) && RegWriteM;
-assign ForwardBD = (RtD != 0) && (RtD == WriteRegM) && RegWriteM;
+//assign ForwardAD = (RsD != 0) && (RsD == WriteRegM) && RegWriteM;
+//assign ForwardBD = (RtD != 0) && (RtD == WriteRegM) && RegWriteM;
 
 // Stall when either stall signal has been set (inverted; see diagram)
 assign StallF = !(branchStall || lwStall || stallSyscall);

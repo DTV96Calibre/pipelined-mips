@@ -8,7 +8,7 @@ input clock;
 output reg [31:0] cur_count;
 always @(posedge clock)
 begin
-    if(stallf==0)
+    if(stallf==1)
         cur_count <= next_count;
 end
 initial

@@ -222,6 +222,24 @@ module cpu(clock);
     .ReadDataW(ReadDataW), 
     .ALUOutW(ALUOutW), 
     .WriteRegW(WriteRegW));
+    
+    hazard_unit hazard(
+	// Inputs
+	.RsD(RsD),
+	.RtD(RtD),
+	.BranchD(BranchD),
+	.RsE(RsE),
+	.RtE(RtE),
+	.WriteRegE(WriteRegE),
+	.MemtoRegE(MemtoRegE),
+	.RegWriteE(RegWriteE),
+	.WriteRegM(WriteRegM),
+	.MemtoRegM(MemtoRegM),
+	.RegWriteM(RegWriteM),
+	.WriteRegW(WriteRegW),
+	.RegWriteW(RegWriteW)
+	);
+
 
 
 endmodule

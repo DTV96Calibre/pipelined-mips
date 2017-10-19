@@ -41,6 +41,7 @@ begin
         `ALU_slt: result = truevall < truevalr; // lvalue < rvalue;
         `ALU_sll: result = truevall << shamt;
         `ALU_sra: result = truevall >>> shamt;
+	`ALU_imm_nop: result = truevalr;	// truevaluer is the immediate value
         `ALU_undef: result = `dc32;
     endcase
 end

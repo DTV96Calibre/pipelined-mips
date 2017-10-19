@@ -13,7 +13,7 @@ begin
 end
 initial
 begin
-    cur_count <= 32'h00400020;
+    cur_count <= 32'h0040002C;
 end
 endmodule
 

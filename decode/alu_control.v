@@ -32,6 +32,7 @@ module alu_control(opcode, funct, alu_op);
 			`LW: alu_op = `ALU_add;
 			`ADDIU: alu_op = `ALU_add;
 			`ORI: alu_op = `ALU_OR;
+			`LUI: alu_op = `ALU_imm_nop;
 			default: alu_op = `ALU_undef;
 		endcase
 	end

@@ -334,6 +334,8 @@
 
 // Added for Pipelined Mips project by mdrr001
 `define ALU_sra				4'b1000
+// This signals the ALU to simply pass the immediate value on as the result.
+`define ALU_imm_nop			4'b1101
 
 `define ALUOP_LWSW			2'b00
 `define ALUOP_RFMT			2'b10

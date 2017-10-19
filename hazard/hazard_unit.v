@@ -128,7 +128,7 @@ assign StallF = !(branchStall || lwStall || stallSyscall);
 assign StallD = !(branchStall || lwStall || stallSyscall);
 
 // Flush when either stall signal has been set
-assign FlushE = branchStall || lwStall || stallSyscall;
+assign FlushE = !(branchStall || lwStall || stallSyscall);
 
 // Assign EX/EX or MEM/EX forwarding of Rs as appropriate
 assign ForwardAE = ((RsE != 0) && (RsE == WriteRegM) && RegWriteM)  ? 2'b10 : // EX/EX

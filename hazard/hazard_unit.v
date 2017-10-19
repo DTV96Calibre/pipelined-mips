@@ -114,14 +114,14 @@ assign StallD = !(branchStall || lwStall);
 // Flush when either stall signal has been set
 assign FlushE = branchStall || lwStall;
 
-// Assign EX/EX or MEM/MEM forwarding of Rs as appropriate
-assign ForwardAE = ((RsE != 0) && (RsE == WriteRegM) && RegWriteM)  ? 2'b10 : // EX/MEM
-				   (((RsE != 0) && (RsE == WriteRegW) && RegWriteW) ? 2'b01 : // MEM/MEM
+// Assign EX/EX or MEM/EX forwarding of Rs as appropriate
+assign ForwardAE = ((RsE != 0) && (RsE == WriteRegM) && RegWriteM)  ? 2'b10 : // EX/EX
+				   (((RsE != 0) && (RsE == WriteRegW) && RegWriteW) ? 2'b01 : // MEM/EX
 				   0);
 
-// Assign EX/EX or MEM/MEM forwarding of Rt as appropriate
-assign ForwardBE = ((RtE != 0) && (RtE == WriteRegM) && RegWriteM)  ? 2'b10 : // EX/MEM
-				   (((RtE != 0) && (RtE == WriteRegW) && RegWriteW) ? 2'b01 : // MEM/MEM
+// Assign EX/EX or MEM/EX forwarding of Rt as appropriate
+assign ForwardBE = ((RtE != 0) && (RtE == WriteRegM) && RegWriteM)  ? 2'b10 : // EX/EX
+				   (((RtE != 0) && (RtE == WriteRegW) && RegWriteW) ? 2'b01 : // MEM/EX
 				   0);
 
 endmodule

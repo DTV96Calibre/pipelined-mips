@@ -369,9 +369,24 @@
 `define SIZE_HALF  2'h1
 `define SIZE_WORD  2'h2
 
+
+// Define syscalls. Added by mdrr001.
 `define SYSCALL_PRINT_INT 1
 `define SYSCALL_PUT_S     4
 `define SYSCALL_EXIT 	  10
 `define SYSCALL_PUT_C 	  11
+
+// Define branch types, used by the jump_unit. Added by mdrr001.
+`define BV_NONE           3'b000
+`define BV_JUMP_REG       3'b001
+`define BV_JUMP_LINK      3'b010
+`define BV_BEQ            3'b011
+`define BV_BNE            3'b100
+`define BV_BLTZ           3'b101
+`define BV_JUMP           3'b110
+`define BV_UNDEF          3'bxxx
+
+`define JUMP_ADDRESS_UNDEF 31'hxxxx
+
 
 `endif

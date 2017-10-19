@@ -92,6 +92,12 @@ module cpu(clock);
     wire [31:0] ResultW;
     assign ResultW = MemtoRegW ? ReadDataW : ALUOutW;
 
+    // This is true if the current instruction is a jump / branch instruction.
+    // This is distinct from pc_branch_d, which stores the pc to jump to.
+    // This is distinct from pc_src_d, which decides whether the processor
+    // actually jumps.
+    wire BranchD;
+
     fetch fetch(
         .clk(clock),
         

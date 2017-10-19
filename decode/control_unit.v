@@ -10,7 +10,9 @@
 `include "decode/classify.v"
 `include "decode/alu_control.v"
 
-module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write, mem_to_reg, mem_write, alu_op, alu_src, reg_dest, branch, jump, jump_reg, jump_link, syscall);
+module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write,
+		mem_to_reg, mem_write, alu_op, alu_src, reg_dest,
+		branch_variant);
 
 	input wire [5:0] opcode;
 	input wire [5:0] funct;
@@ -29,10 +31,8 @@ module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write, mem_to_reg, 
 	
 	output wire alu_src;
 	output wire reg_dest;
-	output wire branch;
-	output wire jump;
-	output wire jump_reg;
-	output wire jump_link;
+
+	output reg [2:0] branch_variant;
 	
 	// Outputs 1 if the current instruction is a syscall, 0 otherwise.
 	output wire syscall;
@@ -45,16 +45,6 @@ module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write, mem_to_reg, 
 
 	alu_control alu(opcode, funct, alu_op);
 	classify classifier(opcode, is_r_type, is_i_type, is_j_type);
-
-	assign branch =
-		(opcode == `BNE) |
-		(opcode == `BEQ) |
-		((opcode == `REGIMM) & (reg_rt_id == `BLTZ));
-	
-	assign jump =
-		(opcode == `J) |
-		(opcode == `JAL) |
-		(opcode == `JR);
 
 	assign mem_write =
 		(opcode == `SW) |
@@ -76,16 +66,31 @@ module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write, mem_to_reg, 
 		(funct == `SRA) |
 		(funct == `SLL));
 
-	// This is 1 if and only if the ALU needs an immediate value.
-	assign alu_src = is_i_type | is_shift_op;
 
 	// This is 1 if and only if the instruction is an r-type instruction.
 	assign reg_dest = is_r_type; 
 	
-	assign jump_reg = (opcode == `JR);
-	assign jump_link = (opcode == `JAL);
-
 	assign syscall = (opcode == `SPECIAL) & (funct == `SYSCALL);
+
+	always @(*) begin
+		case (opcode)
+			`REGIMM: begin
+			 	if (reg_rt_id == `BLTZ) begin
+			 		branch_variant <= `BV_BLTZ;
+				end else begin
+					branch_variant <= `BV_NONE;
+				end
+			end
+			`J: branch_variant <= `BV_JUMP;
+			`JAL: branch_variant <= `BV_JUMP_LINK;
+			`JR: branch_variant <= `BV_JUMP_REG;
+			`BEQ: branch_variant <= `BV_BEQ;
+			`BNE: branch_variant <= `BV_BNE;
+			default: branch_variant <= `BV_NONE;
+		endcase
+	end
+	
+
 
 endmodule
 

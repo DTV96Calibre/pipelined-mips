@@ -18,6 +18,7 @@ module alu_control(opcode, funct, alu_op);
 			`SPECIAL: begin 
 				case (funct)
 					`SYSCALL: alu_op = 0;
+					`JR: alu_op = 0;
 					`ADDU: alu_op = `ALU_add;
 					`ADD: alu_op = `ALU_add;
 					`SUBU: alu_op = `ALU_sub;

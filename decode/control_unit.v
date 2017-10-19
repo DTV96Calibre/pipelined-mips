@@ -43,6 +43,10 @@ module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write,
 	
 	wire is_shift_op;
 
+	// True if the special opcode requires reg_write. Junk if the current
+	// instruction isn't special.
+	wire reg_write_special;
+
 	alu_control alu(opcode, funct, alu_op);
 	classify classifier(opcode, is_r_type, is_i_type, is_j_type);
 
@@ -51,12 +55,14 @@ module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write,
 		(opcode == `SB);
 	
 	assign reg_write =
-		(opcode == `SPECIAL) |
+		((opcode == `SPECIAL) && reg_write_special) |
 		(opcode == `ADDIU) |
 		(opcode == `ORI) |
 		(opcode == `SW) |
 		(opcode == `SB) |
 		(opcode == `LUI);
+
+	assign reg_write_special = !((funct == `JR) || (funct == `SYSCALL));
 	
 	assign mem_to_reg =
 		(opcode == `LW);
@@ -85,7 +91,13 @@ module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write,
 			end
 			`J: branch_variant <= `BV_JUMP;
 			`JAL: branch_variant <= `BV_JUMP_LINK;
-			`JR: branch_variant <= `BV_JUMP_REG;
+			`SPECIAL: begin
+				if (funct == `JR) begin
+			       		branch_variant <= `BV_JUMP_REG;
+				end else begin
+					branch_variant <= `BV_NONE;
+				end
+			end
 			`BEQ: branch_variant <= `BV_BEQ;
 			`BNE: branch_variant <= `BV_BNE;
 			default: branch_variant <= `BV_NONE;

@@ -12,7 +12,7 @@
 
 module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write,
 		mem_to_reg, mem_write, alu_op, alu_src, reg_dest,
-		branch_variant);
+		branch_variant, syscall);
 
 	input wire [5:0] opcode;
 	input wire [5:0] funct;

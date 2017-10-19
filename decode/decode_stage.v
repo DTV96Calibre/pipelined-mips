@@ -15,7 +15,7 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		reg_rs_value, reg_rt_value, immediate, jump_address, reg_rs_id,
 		reg_rt_id, reg_rd_id, shamt,
 
-		reg_write_D, mem_to_reg, mem_write, alu_op, alu_src, reg_dest, jump);
+		reg_write_D, mem_to_reg, mem_write, alu_op, alu_src, reg_dest, pc_src);
 
 	input wire clock;
 
@@ -45,7 +45,7 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	output wire [3:0] alu_op;
 	output wire alu_src;
 	output wire reg_dest;
-	output wire jump;
+	output wire pc_src;
 	
 	// Internal wires.
 	wire is_r_type;
@@ -53,14 +53,8 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	wire [5:0] funct;
 	wire [5:0] opcode;
 
-
 	wire [31:0] maybe_jump_address;
 	wire [31:0] maybe_branch_address;
-	
-	wire control_jump;
-	wire control_branch;
-	wire control_jump_reg;
-	wire control_jump_link;
 	
 	wire syscall;
 	wire [31:0] syscall_funct;
@@ -78,7 +72,6 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.should_writeback (reg_write_W),
 		.writeback_id (writeback_id),
 		.is_r_type (is_r_type),
-		.is_jr (control_jump_reg),
 		.reg_rs_value (reg_rs_value),
 		.reg_rt_value (reg_rt_value),
 		.immediate (immediate),
@@ -112,13 +105,14 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	
 	// The jump decider.
 	jump_unit jump_decider(
+		.pc_plus_four(pc_plus_four),
 		.maybe_jump_address (maybe_jump_address),
 		.maybe_branch_address (maybe_branch_address),
 		.reg_rs (reg_rs_value),
 		.reg_rt (reg_rt_value),
 		.branch_variant (branch_variant),
 		.jump_address (jump_address),
-		.jump (jump)
+		.pc_src (pc_src)
 		);
 	
 	syscall_unit syscall_unit(syscall, syscall_funct, syscall_param1);

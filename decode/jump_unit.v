@@ -8,7 +8,7 @@
 // Takes in all the jump-related info from the control_unit and decoder
 // modules, and decides whether to jump and where to jump.
 module jump_unit(pc_plus_four, maybe_jump_address, maybe_branch_address,
-		reg_rs, branch_variant, jump_address, pc_src, 
+		reg_rs, reg_rt, branch_variant, jump_address, pc_src, 
 		branch, ra_write, ra_write_value);
 	
 	// The current PC, used for jump and link.

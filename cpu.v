@@ -151,7 +151,7 @@ module cpu(clock);
         .reg_dest(RegDstD),
 
         // Outputs back to fetch.
-        .jump(pc_src_d),
+	.pc_src (pc_src_d),
         .jump_address(pc_branch_d)
         );
 

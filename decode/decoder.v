@@ -27,7 +27,7 @@
 //
 // TODO: Add reg_jump_address for jr instruction.
 module decoder(clock, instruction, pc_plus_four, writeback_value,
-		should_writeback, writeback_id, is_r_type, is_jr, reg_rs_value,
+		should_writeback, writeback_id, is_r_type, reg_rs_value,
 		reg_rt_value, immediate, branch_address, jump_address,
 		reg_rs_id, reg_rt_id, reg_rd_id, shamt, funct, opcode,
 		syscall_funct, syscall_param1);
@@ -62,7 +62,6 @@ module decoder(clock, instruction, pc_plus_four, writeback_value,
 	// This is 1 if the current instruction is R-type, 0 otherwise.
 	input wire is_r_type;
 
-	input wire is_jr;
 
 	// This outputs the value of the RS register of the current instruction.
 	// If the current instruction is J-type, consider this output junk.
@@ -192,9 +191,8 @@ module decoder(clock, instruction, pc_plus_four, writeback_value,
 	// This module calculates the actual target address, assuming the
 	// current instruction is a jump instruction.
 	wire [31:0] calc_jump_address;
-	jump_calculator j_calc(raw_jump_address, pc_plus_four, calc_jump_address);
+	jump_calculator j_calc(raw_jump_address, pc_plus_four, jump_address);
 	
-	assign jump_address = is_jr ? reg_rs_value : calc_jump_address;
 	
 
 endmodule

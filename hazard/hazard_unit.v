@@ -107,7 +107,7 @@ assign branchStall = (BranchD && RegWriteE &&
 				  	  (WriteRegM == RsD || WriteRegM == RtD));
 
 // lwStall is high when we're writing from memory to a reg
-assign lwStall = (RsD == RtE) || (RtD == RtE) && MemtoRegE;
+assign lwStall = ((RsD == RtE) || (RtD == RtE)) && MemtoRegE;
 /*
 initial begin
 	StallF = 1;

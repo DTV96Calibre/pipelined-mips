@@ -112,7 +112,8 @@ module cpu(clock);
         );
      fetch_pipeline_reg fpipe(
        .clock(clock)
-     , .clear(1'b0)
+     , .clear(pc_src_d)
+     , .StallD(StallD)
      , .pc_plus_four_F(pc_plus_4f)
      , .instruction_F(instructionf)
      , .pc_plus_four_D(pc_plus_4d)

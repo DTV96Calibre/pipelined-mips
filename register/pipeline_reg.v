@@ -22,7 +22,8 @@ endmodule
 module pipeline_reg_stall(clock, clear, stall, new_value, curr_value);
 	input wire clock;
 	input wire clear;
-	input wire [31:0] new_value;
+	input wire stall;
+    input wire [31:0] new_value;
 	output wire [31:0] curr_value;
 
 	wire [31:0] gated_new_value;

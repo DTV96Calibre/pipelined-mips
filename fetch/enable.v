@@ -8,8 +8,6 @@ always@(posedge clk)
 begin
 if(flag)
     cur = prev;
-else
-    cur = 0;
 end
 
 endmodule

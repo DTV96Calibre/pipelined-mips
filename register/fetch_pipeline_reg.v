@@ -10,7 +10,7 @@ module fetch_pipeline_reg(clock, clear, StallD, pc_plus_four_F, instruction_F, p
 	input wire clear;
 	input wire [31:0] pc_plus_four_F;
 	input wire [31:0] instruction_F;
-
+    input wire StallD;
 	output wire [31:0] pc_plus_four_D;
 	output wire [31:0] instruction_D;
     

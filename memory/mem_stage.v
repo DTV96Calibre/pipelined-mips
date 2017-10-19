@@ -4,6 +4,9 @@
 `ifndef MEM_STAGE
 `define MEM_STAGE
 
+/** Combines the pipeline register feeding the Memory stage with the memory
+ * stage logic.
+ */
 module mem_stage(input CLK, RegWriteE, MemtoRegE, MemWriteE,
   input [31:0] ALUOutE, WriteDataE,
 	input [4:0] WriteRegE,

@@ -19,7 +19,8 @@
 // the value discretely rather than continuously, it must wait until posedge of
 // the clock.
 module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id,
-		reg_write_value, reg_rs_value, reg_rt_value);
+		reg_write_value, reg_rs_value, reg_rt_value, syscall_funct,
+		syscall_param1);
 	
 	// The clock. This is inverted, then passed on to the individual
 	// registers.
@@ -50,6 +51,11 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 	// values, rather than using them continuously.
 	output reg [31:0] reg_rs_value;
 	output reg [31:0] reg_rt_value;
+
+	// These two register values are used for syscalls. Syscall function
+	// is determined by $v0, and the first parameter is determined by $a0
+	output wire [31:0] syscall_funct;
+	output wire [31:0] syscall_param1;
 	
 	// This is the inverse of the current clock. This is used to change
 	// the register array's behavior from write-at-posedge to
@@ -95,6 +101,10 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 		reg_rs_value <= bank_outputs[reg_rs_id];
 		reg_rt_value <= bank_outputs[reg_rt_id];
 	end
+
+	assign syscall_funct = bank_outputs[`v0];
+	assign syscall_param1 = bank_outputs[`a0];
+
 endmodule
 
 `endif

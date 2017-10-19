@@ -7,6 +7,7 @@
 `include "decode/decoder.v"
 `include "decode/control_unit.v"
 `include "decode/jump_unit.v"
+`include "decode/syscall_unit.v"
 
 
 module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback_id, reg_write_W,
@@ -60,6 +61,10 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	wire control_branch;
 	wire control_jump_reg;
 	wire control_jump_link;
+	
+	wire syscall;
+	wire [31:0] syscall_funct;
+	wire [31:0] syscall_param1;
 
 	// The decoder
 	// TODO: Link part of Jump and Link not implemented!
@@ -82,7 +87,9 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.reg_rd_id (reg_rd_id),
 		.shamt (shamt),
 		.funct (funct),
-		.opcode (opcode)
+		.opcode (opcode),
+		.syscall_funct (syscall_funct),
+		.syscall_param1 (syscall_param1)
 		);
 
 	// The control unit.
@@ -100,7 +107,8 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.branch (control_branch),
 		.jump (control_jump),
 		.jump_reg (control_jump_reg),
-		.jump_link (control_jump_link)
+		.jump_link (control_jump_link),
+		.syscall (syscall)
 		);
 	
 	// The jump decider.
@@ -115,7 +123,8 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.jump_address (jump_address),
 		.jump (jump)
 		);
-
+	
+	syscall_unit syscall_unit(syscall, syscall_funct, syscall_param1);
 
 endmodule
 

@@ -10,7 +10,7 @@
 `include "decode/classify.v"
 `include "decode/alu_control.v"
 
-module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write, mem_to_reg, mem_write, alu_op, alu_src, reg_dest, branch, jump, jump_reg, jump_link);
+module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write, mem_to_reg, mem_write, alu_op, alu_src, reg_dest, branch, jump, jump_reg, jump_link, syscall);
 
 	input wire [5:0] opcode;
 	input wire [5:0] funct;
@@ -33,6 +33,9 @@ module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write, mem_to_reg, 
 	output wire jump;
 	output wire jump_reg;
 	output wire jump_link;
+	
+	// Outputs 1 if the current instruction is a syscall, 0 otherwise.
+	output wire syscall;
 
 	// wire is_r_type;	// Declared as an output.
 	wire is_i_type;
@@ -81,6 +84,8 @@ module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write, mem_to_reg, 
 	
 	assign jump_reg = (opcode == `JR);
 	assign jump_link = (opcode == `JAL);
+
+	assign syscall = (opcode == `SPECIAL) & (funct == `SYSCALL);
 
 endmodule
 

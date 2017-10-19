@@ -29,7 +29,8 @@
 module decoder(clock, instruction, pc_plus_four, writeback_value,
 		should_writeback, writeback_id, is_r_type, is_jr, reg_rs_value,
 		reg_rt_value, immediate, branch_address, jump_address,
-		reg_rs_id, reg_rt_id, reg_rd_id, shamt, funct, opcode);
+		reg_rs_id, reg_rt_id, reg_rd_id, shamt, funct, opcode,
+		syscall_funct, syscall_param1);
 	
 	// The clock.
 	input wire clock;
@@ -107,8 +108,19 @@ module decoder(clock, instruction, pc_plus_four, writeback_value,
 	// This outputs the function value of the current instruction. If the
 	// current instruction is not R-type, consider this value junk.
 	output wire [5:0] funct;
-
+	
+	// Outputs the current opcode.
 	output wire [5:0] opcode;
+
+	// Outputs the syscall function number, assuming the instruction is
+	// a syscall function.
+	output wire [31:0] syscall_funct;
+
+	// Outputs the syscall parameter, which is used in syscalls, assuming
+	// the instruction is a syscall function.
+	// Technically, there are 4 sycall parameters, but we only implement
+	// syscalls that need one parameter.
+	output wire [31:0] syscall_param1;
 	
 	// These are the register ID's decoded assuming the current instruction
 	// is R-type.
@@ -142,7 +154,9 @@ module decoder(clock, instruction, pc_plus_four, writeback_value,
 		.control_write_id (writeback_id),
 		.reg_write_value(writeback_value),
 		.reg_rs_value(reg_rs_value),
-		.reg_rt_value(reg_rt_value)
+		.reg_rt_value(reg_rt_value),
+		.syscall_funct(syscall_funct),
+		.syscall_param1(syscall_param1)
 		);
 
 	// This module extracts info from the current instruction, assuming it

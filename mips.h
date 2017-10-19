@@ -369,4 +369,9 @@
 `define SIZE_HALF  2'h1
 `define SIZE_WORD  2'h2
 
+`define SYSCALL_PRINT_INT 1
+`define SYSCALL_PUT_S     4
+`define SYSCALL_EXIT 	  10
+`define SYSCALL_PUT_C 	  11
+
 `endif

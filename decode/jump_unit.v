@@ -41,7 +41,11 @@ module jump_unit(pc_plus_four, maybe_jump_address, maybe_branch_address,
 	// This is the value to write to the ra register, if needed.
 	output wire [31:0] ra_write_value;
 
-	
+	initial
+    begin
+        pc_src = 0;
+        jump_address = 0;
+    end
 	// This is the register containing the value to jump to if the
 	// instruction is JUMP_REG.
 	wire [31:0] jump_reg_address;
@@ -53,8 +57,8 @@ module jump_unit(pc_plus_four, maybe_jump_address, maybe_branch_address,
 	assign ra_write = (branch_variant == `BV_JUMP_LINK);
 
 	assign ra_write_value = pc_plus_four;
-
-	// Determine pc_src.
+    
+    // Determine pc_src.
 	always @(*) begin
 		case (branch_variant)
 			`BV_NONE: pc_src <= 1'bx;

@@ -14,11 +14,18 @@ In the actual iVerilog code, each stage is encapsulated within a module (e.g. *m
 
 ### Fetch
 
-Fetch differs very little from the original diagram provided to us at the beginning of the project. The major differences exist in the new pc mux which is flipped do to iverilog setting the control signal to 1 initially thus causing an immediate jump. The second change is the placement of the enable bit which exists within the pc module. In addition the starting point of the pc is hard coded to avoid junk code produced by the mips compilers when necessary.
+Fetch differs very little from the original diagram provided to us at the beginning of the project. The major differences exist in the new pc mux which is flipped due to iverilog setting the control signal to 1 initially thus causing an immediate jump. The second change is the placement of the enable bit which exists within the pc module. In addition the starting point of the pc is hard coded to avoid junk code produced by the mips compilers when necessary.
 
 ### Decode
 
 ### Execute
+
+The execute stage is encapsulated in its own module, which instantiates, in addition to the execute
+pipeline register, four multiplexers and the ALU module. Two muxes are 2-way (those that generate the
+outgoing WriteRegE and SrcBE signals) and two are 3-way (those that generate the SrcAE and WriteDataE
+signals). The inputs and outputs from the execute pipeline register are equivalent to those of the 
+diagram with the exception of the new 5-bit shamtD input and shamtE output, which feed into the ALU and
+specifies the amount by which the source register Rs is shifted.
 
 ### Memory
 In this implementation, memory operations execute in a single cycle. Further, MemtoRegM is used

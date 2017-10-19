@@ -12,7 +12,7 @@
 module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback_id, reg_write_W,
 
 		reg_rs_value, reg_rt_value, immediate, jump_address, reg_rs_id,
-		reg_rt_id, reg_rd_id, shamt,
+		reg_rt_id, reg_rd_id, shamtD,
 
 		reg_write_D, mem_to_reg, mem_write, alu_op, alu_src, reg_dest, pc_src,
 		
@@ -37,7 +37,7 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	output wire [4:0] reg_rs_id;
 	output wire [4:0] reg_rt_id;
 	output wire [4:0] reg_rd_id;
-	output wire [4:0] shamt;
+	output wire [4:0] shamtD;
 
 	// Outputs from the control unit.
 	output wire reg_write_D;
@@ -66,6 +66,11 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	wire imm_is_signed;
 	wire [31:0] sign_immediate;
 	wire [31:0] unsign_immediate;
+
+	// This wire holds the shamt value specified by the instruction. The
+	// actual shamt value may be modified by the control unit for some
+	// instructions.
+	wire [4:0] instr_shamt;
 	
 	assign immediate = imm_is_signed ? sign_immediate : unsign_immediate;
 
@@ -88,7 +93,7 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.reg_rs_id (reg_rs_id),
 		.reg_rt_id (reg_rt_id),
 		.reg_rd_id (reg_rd_id),
-		.shamt (shamt),
+		.shamt (instr_shamt),
 		.funct (funct),
 		.opcode (opcode),
 		.syscall_funct (syscall_funct),
@@ -99,6 +104,7 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	control_unit control(
 		.opcode (opcode),
 		.funct (funct),
+		.instr_shamt (instr_shamt),
 		.reg_rt_id (reg_rt_id),
 		.is_r_type (is_r_type),
 		.reg_write (reg_write_D),
@@ -109,7 +115,8 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.reg_dest (reg_dest),
 		.branch_variant (branch_variant),
 		.syscall (syscall),
-		.imm_is_signed (imm_is_signed)
+		.imm_is_signed (imm_is_signed),
+		.shamtD (shamtD)
 		);
 	
 	// The jump decider.

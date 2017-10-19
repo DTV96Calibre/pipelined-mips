@@ -138,7 +138,7 @@ module cpu(clock);
         .reg_rs_id(RsD),
         .reg_rt_id(RtD),
         .reg_rd_id(RdD),
-        .shamt(shamtD),
+        .shamtD(shamtD),
 
         // Control to EX
         .reg_write_D(RegWriteD),

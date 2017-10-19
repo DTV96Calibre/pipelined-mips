@@ -10,12 +10,13 @@
 `include "decode/classify.v"
 `include "decode/alu_control.v"
 
-module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write,
+module control_unit(opcode, funct, instr_shamt, reg_rt_id, is_r_type, reg_write,
 		mem_to_reg, mem_write, alu_op, alu_src, reg_dest,
-		branch_variant, syscall, imm_is_signed);
+		branch_variant, syscall, imm_is_signed, shamtD);
 
 	input wire [5:0] opcode;
 	input wire [5:0] funct;
+	input wire [4:0] instr_shamt;
 	
 	// This register ID is used like a funct for opcode 0 (called REGIMM)
 	input wire [4:0] reg_rt_id;
@@ -40,6 +41,8 @@ module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write,
 	// Outputs 1 if the current instruction uses an unsigned immediate
 	// value; 0 otherwise.
 	output wire imm_is_signed;
+	
+	output wire [4:0] shamtD;
 
 	// wire is_r_type;	// Declared as an output.
 	wire is_i_type;
@@ -78,7 +81,9 @@ module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write,
 		(opcode == `SPECIAL) & (
 		(funct == `SRA) |
 		(funct == `SLL));
-
+	
+	// For LUI, the shamt needs to be set to 16.
+	assign shamtD = (opcode == `LUI) ? 16 : instr_shamt;
 
 	// This is 1 if and only if the instruction is an r-type instruction.
 	assign reg_dest = is_r_type; 

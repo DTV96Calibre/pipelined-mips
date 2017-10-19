@@ -55,7 +55,7 @@ endmodule
 // contains no state. If the instruction is not I-type, then the output wires
 // of this module should be treated as junk. The extracted immediate value is
 // correctly sign extended.
-module instr_splitter_i(instruction, rs, rd, immediate);
+module instr_splitter_i(instruction, rs, rd, sign_immediate, unsign_immediate);
 	
 	// The current instruction.
 	input wire [31:0] instruction;
@@ -67,7 +67,9 @@ module instr_splitter_i(instruction, rs, rd, immediate);
 
 	// The current immediate value, sign extended to 32 bits, assuming
 	// the current instruction is I-type.
-	output wire [31:0] immediate;
+	output wire [31:0] sign_immediate;
+
+	output wire [31:0] unsign_immediate;
 	
 	// This wire stores the 16-bit immediate extracted from the
 	// instruction.
@@ -78,9 +80,12 @@ module instr_splitter_i(instruction, rs, rd, immediate);
 	assign rs = instruction[25:21];
 	assign rd = instruction[20:16];
 	assign raw_immediate = instruction[15:0];
+
+	assign unsign_immediate[15:0] = raw_immediate;
+	assign unsign_immediate[31:16] = 0;
 	
 	// Sign-extend the extracted immediate value for later processing.
-	imm_sign_extend extender(raw_immediate, immediate);
+	imm_sign_extend extender(raw_immediate, sign_immediate);
 
 endmodule
 

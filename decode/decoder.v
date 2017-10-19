@@ -28,7 +28,7 @@
 // TODO: Add reg_jump_address for jr instruction.
 module decoder(clock, instruction, pc_plus_four, writeback_value,
 		should_writeback, writeback_id, is_r_type, reg_rs_value,
-		reg_rt_value, immediate, branch_address, jump_address,
+		reg_rt_value, sign_immediate, unsign_immediate, branch_address, jump_address,
 		reg_rs_id, reg_rt_id, reg_rd_id, shamt, funct, opcode,
 		syscall_funct, syscall_param1);
 	
@@ -74,7 +74,11 @@ module decoder(clock, instruction, pc_plus_four, writeback_value,
 	// This outputs the sign-extended immediate value in the current
 	// instruction. If the current instruction is not I-type, consider
 	// this output junk.
-	output wire [31:0] immediate;
+	output wire [31:0] sign_immediate;
+
+	// Outputs the raw immediate value, extended to 32 bits. If the
+	// current instruction is not I-type, consider this output junk.
+	output wire [31:0] unsign_immediate;
 
 	// This outputs the target address of a branch instruction, based on
 	// pc + 4 and the immediate value in the instruction. If the current
@@ -175,7 +179,8 @@ module decoder(clock, instruction, pc_plus_four, writeback_value,
 		.instruction (instruction),
 		.rs (i_type_rs),
 		.rd (i_type_rd),
-		.immediate (immediate)
+		.sign_immediate (sign_immediate),
+		.unsign_immediate (unsign_immediate)
 		);
 
 	// This module extracts info from the current instruction, assuming it
@@ -186,7 +191,7 @@ module decoder(clock, instruction, pc_plus_four, writeback_value,
 
 	// This module calculates the actual target address, assuming the
 	// current instruction is a branch instruction.
-	branch_adder b_calc(immediate, pc_plus_four, branch_address);
+	branch_adder b_calc(sign_immediate, pc_plus_four, branch_address);
 
 	// This module calculates the actual target address, assuming the
 	// current instruction is a jump instruction.

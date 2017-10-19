@@ -4,7 +4,8 @@
 
 // This module takes in the immediate value in a branch instruction, and the
 // next PC address (current PC address + 4), and outputs the target PC address
-// to jump to.
+// to jump to. Note, branch_immediate is expected to be sign extended, though
+// it shouldn't matter.
 module branch_adder(branch_immediate, pc_plus_four, jump_address);
 	
 	// The immediate value of the branch instruction, sign extended

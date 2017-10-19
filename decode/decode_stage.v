@@ -63,6 +63,12 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 
 	wire [2:0] branch_variant;
 
+	wire imm_is_signed;
+	wire [31:0] sign_immediate;
+	wire [31:0] unsign_immediate;
+	
+	assign immediate = imm_is_signed ? sign_immediate : unsign_immediate;
+
 	// The decoder
 	// TODO: Link part of Jump and Link not implemented!
 	decoder decoder(
@@ -75,7 +81,8 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.is_r_type (is_r_type),
 		.reg_rs_value (reg_rs_value),
 		.reg_rt_value (reg_rt_value),
-		.immediate (immediate),
+		.sign_immediate (sign_immediate),
+		.unsign_immediate (unsign_immediate),
 		.branch_address (maybe_branch_address),
 		.jump_address (maybe_jump_address),
 		.reg_rs_id (reg_rs_id),
@@ -101,7 +108,8 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.alu_src (alu_src),
 		.reg_dest (reg_dest),
 		.branch_variant (branch_variant),
-		.syscall (syscall)
+		.syscall (syscall),
+		.imm_is_signed (imm_is_signed)
 		);
 	
 	// The jump decider.

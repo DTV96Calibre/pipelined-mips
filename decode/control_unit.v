@@ -12,7 +12,7 @@
 
 module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write,
 		mem_to_reg, mem_write, alu_op, alu_src, reg_dest,
-		branch_variant, syscall);
+		branch_variant, syscall, imm_is_signed);
 
 	input wire [5:0] opcode;
 	input wire [5:0] funct;
@@ -36,6 +36,10 @@ module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write,
 	
 	// Outputs 1 if the current instruction is a syscall, 0 otherwise.
 	output wire syscall;
+
+	// Outputs 1 if the current instruction uses an unsigned immediate
+	// value; 0 otherwise.
+	output wire imm_is_signed;
 
 	// wire is_r_type;	// Declared as an output.
 	wire is_i_type;
@@ -64,6 +68,9 @@ module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write,
 
 	assign reg_write_special = !((funct == `JR) || (funct == `SYSCALL));
 	
+	assign imm_is_signed =
+		(opcode == `ORI);
+
 	assign mem_to_reg =
 		(opcode == `LW);
 	

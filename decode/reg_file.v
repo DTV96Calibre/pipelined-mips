@@ -19,8 +19,8 @@
 // the value discretely rather than continuously, it must wait until posedge of
 // the clock.
 module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id,
-		reg_write_value, reg_rs_value, reg_rt_value, syscall_funct,
-		syscall_param1);
+		reg_write_value, reg_rs_value, reg_rt_value, ra_write,
+		ra_write_value, syscall_funct, syscall_param1);
 	
 	// The clock. This is inverted, then passed on to the individual
 	// registers.
@@ -44,6 +44,9 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 	// The value to be written to a register. To avoid race conditions,
 	// avoid modifying this signal at negedge of the clock.
 	input wire [31:0] reg_write_value;
+
+	input wire ra_write;
+	input wire [31:0] ra_write_value;
 
 	// This is the value of the rs and rt registers, respectively. These
 	// values change immediately as the inputs reg_rs_id and reg_rt_id
@@ -84,13 +87,24 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 		// that register.
 		for (i = 0; i < 32; i = i + 1) begin
 			wire reg_should_write_gen;
+			wire reg_ra_should_write;
 			wire [31:0] reg_output;
+			wire is_ra_reg;
 
-			register r(inverted_clock, reg_should_write_gen, reg_write_value, reg_output);
+			register r(inverted_clock, reg_should_write_gen | reg_ra_should_write, reg_write_value, reg_output);
 			
+			// True if this is the ra register.
+			assign is_ra_reg = (i == `ra);
+
+			// True if this is the ra register AND it should
+			// write.
+			assign reg_ra_should_write = is_ra_reg && ra_write;
+
 			// Open this register for writing if reg_write_id
 			// matches and it's NOT permanent.
 			assign reg_should_write_gen = ((i == control_write_id) ? 1 : 0) & (i != 0) & control_reg_write;
+
+
 			// Move this register's value on to the corresponding output if
 			// the reg_id matches.
 			assign bank_outputs[i] = reg_output;

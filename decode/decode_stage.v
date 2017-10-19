@@ -67,6 +67,10 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	wire [31:0] sign_immediate;
 	wire [31:0] unsign_immediate;
 
+	// True if ra_write_value needs to be written to the ra register.
+	wire ra_write;
+	wire [31:0] ra_write_value;
+
 	// This wire holds the shamt value specified by the instruction. The
 	// actual shamt value may be modified by the control unit for some
 	// instructions.
@@ -84,6 +88,8 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.should_writeback (reg_write_W),
 		.writeback_id (writeback_id),
 		.is_r_type (is_r_type),
+		.ra_write (ra_write),
+		.ra_write_value (ra_write_value),
 		.reg_rs_value (reg_rs_value),
 		.reg_rt_value (reg_rt_value),
 		.sign_immediate (sign_immediate),
@@ -128,7 +134,9 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.reg_rt (reg_rt_value),
 		.branch_variant (branch_variant),
 		.jump_address (jump_address),
-		.pc_src (pc_src)
+		.pc_src (pc_src),
+		.ra_write_value (ra_write_value),
+		.ra_write (ra_write)
 		);
 	
 

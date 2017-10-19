@@ -61,7 +61,7 @@ module jump_unit(pc_plus_four, maybe_jump_address, maybe_branch_address,
     // Determine pc_src.
 	always @(*) begin
 		case (branch_variant)
-			`BV_NONE: pc_src <= 1'bx;
+			`BV_NONE: pc_src <= 1'b0;
 			
 			`BV_JUMP: pc_src <= 1'b1;
 			`BV_JUMP_REG: pc_src <= 1'b1;

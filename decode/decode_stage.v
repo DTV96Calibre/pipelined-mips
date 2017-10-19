@@ -7,7 +7,6 @@
 `include "decode/decoder.v"
 `include "decode/control_unit.v"
 `include "decode/jump_unit.v"
-`include "decode/syscall_unit.v"
 `include "hazard/hazard_unit.v"
 
 module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback_id, reg_write_W,
@@ -15,7 +14,9 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		reg_rs_value, reg_rt_value, immediate, jump_address, reg_rs_id,
 		reg_rt_id, reg_rd_id, shamt,
 
-		reg_write_D, mem_to_reg, mem_write, alu_op, alu_src, reg_dest, pc_src);
+		reg_write_D, mem_to_reg, mem_write, alu_op, alu_src, reg_dest, pc_src,
+		
+		syscall, syscall_funct, syscall_param1);
 
 	input wire clock;
 
@@ -47,6 +48,10 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	output wire reg_dest;
 	output wire pc_src;
 	
+	output wire syscall;
+	output wire [31:0] syscall_funct;
+	output wire [31:0] syscall_param1;
+	
 	// Internal wires.
 	wire is_r_type;
 
@@ -55,10 +60,6 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 
 	wire [31:0] maybe_jump_address;
 	wire [31:0] maybe_branch_address;
-	
-	wire syscall;
-	wire [31:0] syscall_funct;
-	wire [31:0] syscall_param1;
 
 	wire [2:0] branch_variant;
 
@@ -115,7 +116,6 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.pc_src (pc_src)
 		);
 	
-	syscall_unit syscall_unit(syscall, syscall_funct, syscall_param1);
 
 endmodule
 

@@ -50,6 +50,9 @@ module cpu(clock);
     wire [4:0] RtD;
     wire [4:0] RdD;
     wire [31:0] SignImmD;
+    wire syscallD;
+    wire [31:0] syscall_functD;
+    wire [31:0] syscall_param1D;
 
     wire RegWriteE;
     wire MemtoRegE;
@@ -152,7 +155,12 @@ module cpu(clock);
 
         // Outputs back to fetch.
 	.pc_src (pc_src_d),
-        .jump_address(pc_branch_d)
+        .jump_address(pc_branch_d),
+
+	// Syscall logic
+	.syscall(syscallD),
+	.syscall_funct(syscall_functD),
+	.syscall_param1(syscall_param1D)
         );
 
     execute_stage EX_stage(
@@ -175,6 +183,9 @@ module cpu(clock);
         .RdD(RdD),
         .SignImmD(SignImmD),
         .shamtD(shamtD),
+	.syscallD(syscallD),
+	.syscall_functD(syscall_functD),
+	.syscall_param1D(syscall_param1D),
 
         // Output to the mem stage.
         .RegWriteE(RegWriteE),
@@ -244,7 +255,8 @@ module cpu(clock);
 	.MemtoRegM(MemtoRegM),
 	.RegWriteM(RegWriteM),
 	.WriteRegW(WriteRegW),
-	.RegWriteW(RegWriteW)
+	.RegWriteW(RegWriteW),
+	.syscallD(syscallD)
 	);
 
 

@@ -8,7 +8,7 @@
 module hazard_unit(
 	// Inputs
 	RsD, RtD, BranchD, RsE, RtE, WriteRegE, MemtoRegE, RegWriteE, WriteRegM, 
-	MemtoRegM, RegWriteM, WriteRegW, RegWriteW,
+	MemtoRegM, RegWriteM, WriteRegW, RegWriteW, syscallD,
 
 	// Outputs
 	StallF, StallD, ForwardAD, ForwardBD, FlushE, ForwardAE, ForwardBE
@@ -55,6 +55,9 @@ input wire [4:0] WriteRegW;
 // Whether a register is written to, as determined by the Writeback stage.
 input wire RegWriteW;
 
+// Whether the decode stage is trying to do a syscall.
+input wire syscallD;
+
 /* Outputs */
 
 // This flag is high when the Fetch stage needs to stall.
@@ -78,11 +81,24 @@ output wire [1:0] ForwardAE;
 // 1 for MEM/EX forwarding; 2 for EX/EX forwarding of Rt.
 output wire [1:0] ForwardBE;
 
+// 1 if we need to stall for the syscall.
+wire stallSyscall;
+
+// Intermediate logic for stallSyscall.
+wire stallSyscallV0;
+wire stallSyscallA0;
+
 // Branch stall when a branch is taken (so the next PC is still decoding)
 wire branchStall;
 
 // Additional stall while we wait for load word's WB stage
 wire lwStall;
+
+// Syscall needs to stall if there are any instructions in the pipeline write
+// to v0 or a0.
+assign stallSyscallV0 = (WriteRegE == `v0) || (WriteRegM == `v0) || (WriteRegW == `v0);
+assign stallSyscallA0 = (WriteRegE == `a0) || (WriteRegM == `a0) || (WriteRegW == `a0);
+assign stallSyscall = syscallD && (stallSyscallV0 || stallSyscallA0);
 
 // branchStall is high if we're branching and currently writing to a source reg
 assign branchStall = (BranchD && RegWriteE && 
@@ -108,11 +124,11 @@ assign ForwardAD = (RsD != 0) && (RsD == WriteRegM) && RegWriteM;
 assign ForwardBD = (RtD != 0) && (RtD == WriteRegM) && RegWriteM;
 
 // Stall when either stall signal has been set (inverted; see diagram)
-assign StallF = !(branchStall || lwStall);
-assign StallD = !(branchStall || lwStall);
+assign StallF = !(branchStall || lwStall || stallSyscall);
+assign StallD = !(branchStall || lwStall || stallSyscall);
 
 // Flush when either stall signal has been set
-assign FlushE = branchStall || lwStall;
+assign FlushE = branchStall || lwStall || stallSyscall;
 
 // Assign EX/EX or MEM/EX forwarding of Rs as appropriate
 assign ForwardAE = ((RsE != 0) && (RsE == WriteRegM) && RegWriteM)  ? 2'b10 : // EX/EX

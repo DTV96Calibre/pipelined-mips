@@ -72,6 +72,8 @@ module control_unit(opcode, funct, reg_rt_id, is_r_type, reg_write,
 	
 	assign syscall = (opcode == `SPECIAL) & (funct == `SYSCALL);
 
+	assign alu_src = is_i_type | is_shift_op;
+
 	always @(*) begin
 		case (opcode)
 			`REGIMM: begin

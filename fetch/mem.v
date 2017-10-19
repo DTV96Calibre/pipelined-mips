@@ -10,7 +10,7 @@ output [31:0] memInstruction;
 reg [31:0] mem [32'h100000:32'h101000];
 
 initial begin
-  $readmemh("fib.v", mem);
+  $readmemh("fib_ori.v", mem);
 end
 
 assign memInstruction = mem[readAddress >> 2];

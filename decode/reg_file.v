@@ -90,7 +90,7 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 			
 			// Open this register for writing if reg_write_id
 			// matches and it's NOT permanent.
-			assign reg_should_write_gen = ((i == control_write_id) ? 1 : 0) & (i != 0);
+			assign reg_should_write_gen = ((i == control_write_id) ? 1 : 0) & (i != 0) & control_reg_write;
 			// Move this register's value on to the corresponding output if
 			// the reg_id matches.
 			assign bank_outputs[i] = reg_output;

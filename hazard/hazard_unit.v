@@ -92,7 +92,7 @@ assign branchStall = (BranchD && RegWriteE &&
 
 // lwStall is high when we're writing from memory to a reg
 assign lwStall = (RsD == RtE) || (RtD == RtE) && MemtoRegE;
-
+/*
 initial begin
 	StallF = 1;
 	StallD = 1;
@@ -102,7 +102,7 @@ initial begin
 	ForwardAE = 0;
 	ForwardBE = 0;
 end
-
+*/
 // Execute to Decode forwarding (for branches)
 assign ForwardAD = (RsD != 0) && (RsD == WriteRegM) && RegWriteM;
 assign ForwardBD = (RtD != 0) && (RtD == WriteRegM) && RegWriteM;

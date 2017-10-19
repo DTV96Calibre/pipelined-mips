@@ -18,6 +18,20 @@ module pipeline_reg(clock, clear, new_value, curr_value);
 	
 endmodule
 
+
+module pipeline_reg_stall(clock, clear, stall, new_value, curr_value);
+	input wire clock;
+	input wire clear;
+	input wire [31:0] new_value;
+	output wire [31:0] curr_value;
+
+	wire [31:0] gated_new_value;
+	
+	assign gated_new_value = clear ? 32'b0 : new_value;
+	register r(clock, !stall, gated_new_value, curr_value);
+	
+endmodule
+
 module pipeline_reg_1bit(clock, clear, new_value, curr_value);
 	input wire clock;
 	input wire clear;

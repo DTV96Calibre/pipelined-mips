@@ -7,6 +7,7 @@
 `include "fetch/fetch.v"
 `include "memory/mem_stage.v"
 `include "register/fetch_pipeline_reg.v"
+`include "register/writeback_pipeline_reg.v"
 module cpu(clock);
 
     input wire clock;
@@ -29,9 +30,6 @@ module cpu(clock);
     assign ForwardBE = 0;
     
     
-    // TODO: Duplicate ResultW
-    wire [31:0] ResultW;
-    assign ResultW = 0;
 
     // Outputs to decode
     wire [31:0] pc_plus_4f;
@@ -83,8 +81,16 @@ module cpu(clock);
     wire [31:0] ALUOutM;
     wire [4:0] WriteRegM;
     
+    // Outputs of Writeback pipe
+    wire RegWriteW;
+    wire MemtoRegW;
+    wire [31:0] ReadDataW;
+    wire [31:0] ALUOutW;
+    wire [4:0] WriteRegW;
 
-
+    //this wire is a mux for ResultW
+    wire [31:0] ResultW;
+    assign ResultW = MemtoRegW ? ReadDataW : ALUOutW;
 
     fetch fetch(
         .clk(clock),
@@ -202,6 +208,21 @@ module cpu(clock);
         .ALUOutM(ALUOutM),
         .WriteRegM(WriteRegM)
         );
+    
+    //writeback pipe
+    writeback_pipeline_reg wpipe(
+    .clock(clock), 
+    .RegWriteM(RegWriteM),
+    .MemtoRegM(MemtoRegM), 
+    .ReadDataM(Writeback_RD), 
+    .ALUOutM(ALUOutM), 
+    .WriteRegM(WriteRegM), 
+    .RegWriteW(RegWriteW), 
+    .MemtoRegW(MemtoRegW), 
+    .ReadDataW(ReadDataW), 
+    .ALUOutW(ALUOutW), 
+    .WriteRegW(WriteRegW));
+
 
 endmodule
 

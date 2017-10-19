@@ -8,6 +8,7 @@
 `include "memory/mem_stage.v"
 `include "register/fetch_pipeline_reg.v"
 `include "register/writeback_pipeline_reg.v"
+`include "hazard/hazard_unit.v"
 module cpu(clock);
 
     input wire clock;
@@ -227,7 +228,7 @@ module cpu(clock);
 	// Inputs
 	.RsD(RsD),
 	.RtD(RtD),
-	.BranchD(BranchD),
+	.BranchD(pc_src_d),
 	.RsE(RsE),
 	.RtE(RtE),
 	.WriteRegE(WriteRegE),

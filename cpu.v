@@ -6,7 +6,7 @@
 `include "decode/decode_stage.v"
 `include "fetch/fetch.v"
 `include "memory/mem_stage.v"
-
+`include "register/fetch_pipeline_reg.v"
 module cpu(clock);
 
     input wire clock;
@@ -18,12 +18,27 @@ module cpu(clock);
     // Input from hazard unit
     wire stallf;
     assign stallf = 0;
+    
+    wire FlushE;
+    assign FlushE = 0;
+    
+    
+    wire [1:0] ForwardAE;
+    wire [1:0] ForwardBE;
+    assign ForwardAE = 0;
+    assign ForwardBE = 0;
+    
+    
+    // TODO: Duplicate ResultW
+    wire [31:0] ResultW;
+    assign ResultW = 0;
 
     // Outputs to decode
     wire [31:0] pc_plus_4f;
+    wire [31:0] pc_plus_4d;
     wire [31:0] instructionf;
-    
-    wire FlushE;
+    wire [31:0] instructiond;
+
     wire RegWriteD;
     wire MemtoRegD;
     wire MemWriteD;
@@ -36,14 +51,13 @@ module cpu(clock);
     wire [4:0] RtD;
     wire [4:0] RdD;
     wire [31:0] SignImmD;
-    wire [1:0] ForwardAE;
-    wire [1:0] ForwardBE;
 
     wire RegWriteE;
     wire MemtoRegE;
     wire MemWriteE;
     wire RegDstE;
     wire [3:0] ALUControlE;
+    // ALU outputs (ignored)
     wire [31:0] RD1E;   // ALU outputs.
     wire [31:0] RD2E;
     wire [4:0] RsE;
@@ -69,8 +83,6 @@ module cpu(clock);
     wire [31:0] ALUOutM;
     wire [4:0] WriteRegM;
     
-    // TODO: Duplicate ResultW
-    wire [31:0] ResultW;
 
 
 
@@ -88,13 +100,20 @@ module cpu(clock);
         .pc_plus_4f(pc_plus_4f),
         .instructionf(instructionf)
         );
+     fetch_pipeline_reg fpipe(
+       .clock(clock)
+     , .clear(1'b0)
+     , .pc_plus_four_F(pc_plus_4f)
+     , .instruction_F(instructionf)
+     , .pc_plus_four_D(pc_plus_4d)
+     , .instruction_D(instructiond));
 
     decode_stage decode(
         .clock(clock),
             
         // Inputs from fetch.
-        .instruction(instructionf),
-        .pc_plus_four(pc_plus_4f), 
+        .instruction(instructiond),
+        .pc_plus_four(pc_plus_4d), 
     
         // Inputs from writeback.
         .writeback_value(Writeback_RD), 

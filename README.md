@@ -1,4 +1,4 @@
-# pipelined-mips
+﻿# pipelined-mips
 A Verilog implementation of a pipelined MIPS processor
 
 ![alt text][cpu_diagram]
@@ -13,6 +13,8 @@ The processor roughly follows the Harris & Hennessy diagram shown above. Each pi
 In the actual iVerilog code, each stage is encapsulated within a module (e.g. *mem_state* encapsulates the Memory stage logic). This allows for easier high-level wiring and readability that closely reflects the design paradigm. Each stage's encapsulating module contains the register bank feeding that stage and all the logic associated with that stage.
 
 ### Fetch
+
+Fetch differs very little from the original diagram provided to us at the beginning of the project. The major differences exist in the new pc mux which is flipped do to iverilog setting the control signal to 1 initially thus causing an immediate jump. The second change is the placement of the enable bit which exists within the pc module. In addition the starting point of the pc is hard coded to avoid junk code produced by the mips compilers when necessary.
 
 ### Decode
 

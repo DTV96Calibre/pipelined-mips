@@ -1,8 +1,0 @@
-Files contained created by Lucas Nicolois or based on code provided by Alan Marchiori
-
-Design: I focused on modular design, all the modules necessary for add_test are implemented. data_memory is partialy written and branching logic is not complete.
-Compilation: To compile use the included Makefile
-Execution: run the test executable created by the make function, the add_test executalbe is included in case compilation proves imposible due to datapath issues.
-Testing Methodolgy: For small issues and module testing simple display tests were used. For larger bugs I used gtkwave when possible to identify broken components and race conditions.
-
-git repository: git@gitlab.bucknell.edu:pln005/mips_processor.git

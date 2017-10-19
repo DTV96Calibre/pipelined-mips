@@ -14,7 +14,6 @@ initial begin
 end
 
 assign memInstruction = mem[readAddress >> 2];
-
 endmodule
 
 `endif

@@ -21,6 +21,18 @@ module cpu(clock);
     
     wire FlushE;
     assign FlushE = 0;
+    
+    
+    wire [1:0] ForwardAE;
+    wire [1:0] ForwardBE;
+    assign ForwardAE = 0;
+    assign ForwardBE = 0;
+    
+    
+    // TODO: Duplicate ResultW
+    wire [31:0] ResultW;
+    assign ResultW = 0;
+
     // Outputs to decode
     wire [31:0] pc_plus_4f;
     wire [31:0] pc_plus_4d;
@@ -39,14 +51,13 @@ module cpu(clock);
     wire [4:0] RtD;
     wire [4:0] RdD;
     wire [31:0] SignImmD;
-    wire [1:0] ForwardAE;
-    wire [1:0] ForwardBE;
 
     wire RegWriteE;
     wire MemtoRegE;
     wire MemWriteE;
     wire RegDstE;
     wire [3:0] ALUControlE;
+    // ALU outputs (ignored)
     wire [31:0] RD1E;   // ALU outputs.
     wire [31:0] RD2E;
     wire [4:0] RsE;
@@ -72,8 +83,6 @@ module cpu(clock);
     wire [31:0] ALUOutM;
     wire [4:0] WriteRegM;
     
-    // TODO: Duplicate ResultW
-    wire [31:0] ResultW;
 
 
 

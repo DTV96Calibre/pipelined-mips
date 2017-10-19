@@ -48,8 +48,8 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 	// values change immediately as the inputs reg_rs_id and reg_rt_id
 	// change. See note at the top of the module if sampling from these
 	// values, rather than using them continuously.
-	output wire [31:0] reg_rs_value;
-	output wire [31:0] reg_rt_value;
+	output reg [31:0] reg_rs_value;
+	output reg [31:0] reg_rt_value;
 	
 	// This is the inverse of the current clock. This is used to change
 	// the register array's behavior from write-at-posedge to
@@ -60,8 +60,6 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 	// registers.
 	wire reg_should_write [31:0];
 	wire [31:0] bank_outputs [31:0];
-	wor [31:0] reg_rs_outputs;
-	wor [31:0] reg_rt_outputs;
 
 	// Invert the clock for the registers.
 	assign inverted_clock = ~clock;
@@ -89,15 +87,14 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 			assign reg_should_write_gen = ((i == control_write_id) ? 1 : 0) & (i != 0);
 			// Move this register's value on to the corresponding output if
 			// the reg_id matches.
-			assign reg_rs_outputs = (i == reg_rs_id) ? reg_output : 0;
-			assign reg_rt_outputs = (i == reg_rt_id) ? reg_output : 0;
+			assign bank_outputs[i] = reg_output;
 		end
 	endgenerate
 
-	// Reg_one_outputs and reg_two_outputs will be an array of 0's except
-	// for the registers that match. The reduction OR operator takes every
-	// value in the array and or's them together, resulting in just the
-	// value of the matching register.
+	always@(*) begin
+		reg_rs_value <= bank_outputs[reg_rs_id];
+		reg_rt_value <= bank_outputs[reg_rt_id];
+	end
 endmodule
 
 `endif

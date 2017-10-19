@@ -18,14 +18,15 @@ module cpu(clock);
     // Input from hazard unit
     wire stallf;
     assign stallf = 0;
+    
+    wire FlushE;
     assign FlushE = 0;
     // Outputs to decode
     wire [31:0] pc_plus_4f;
-    wire [31:0} pc_plus_4d;
+    wire [31:0] pc_plus_4d;
     wire [31:0] instructionf;
     wire [31:0] instructiond;
 
-    wire FlushE;
     wire RegWriteD;
     wire MemtoRegD;
     wire MemWriteD;
@@ -90,13 +91,13 @@ module cpu(clock);
         .pc_plus_4f(pc_plus_4f),
         .instructionf(instructionf)
         );
-     fetch_pipeline_reg(
+     fetch_pipeline_reg fpipe(
        .clock(clock)
-     , .clear(0)
-     , pc_plus_four_F(pc_plus4f)
-     , instruction_F(instructionf)
+     , .clear(1'b0)
+     , .pc_plus_four_F(pc_plus_4f)
+     , .instruction_F(instructionf)
      , .pc_plus_four_D(pc_plus_4d)
-     , instruction_D(instructiond));
+     , .instruction_D(instructiond));
 
     decode_stage decode(
         .clock(clock),

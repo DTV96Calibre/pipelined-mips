@@ -3,7 +3,7 @@
 `ifndef FETCH_PIPELINE_REG
 `define FETCH_PIPELINE_REG
 
-`include "pipeline_reg.v"
+`include "register/pipeline_reg.v"
 
 module fetch_pipeline_reg(clock, clear, pc_plus_four_F, instruction_F, pc_plus_four_D, instruction_D);
 	input wire clock;

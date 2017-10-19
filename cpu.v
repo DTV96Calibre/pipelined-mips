@@ -20,7 +20,7 @@ module cpu(clock);
     assign stallf = 0;
     
     wire FlushE;
-    assign FlushE = 0;
+    assign FlushE = 1;	// NOTE: FlushE = 1 is NO FLUSH, =0 is FLUSH
     
     
     wire [1:0] ForwardAE;

@@ -122,9 +122,9 @@ module cpu(clock);
         .pc_plus_four(pc_plus_4d), 
     
         // Inputs from writeback.
-        .writeback_value(Writeback_RD), 
-        .writeback_id(WriteRegM), 
-        .reg_write_W(RegWriteM),
+        .writeback_value(ResultW), 
+        .writeback_id(WriteRegW), 
+        .reg_write_W(RegWriteW),
     
         // Decode to EX.
         .reg_rs_value(RD1D),

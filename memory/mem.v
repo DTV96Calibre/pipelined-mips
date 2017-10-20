@@ -31,7 +31,7 @@ module Memory(input [31:0] A_in, WD, input WE, CLK, MemToRegM, output reg [31:0]
     end else begin
       RD <= `undefined;
       if (MemToRegM) begin
-        $display("Tried to read from unallocated address %h", A);
+        $display($time, ": Tried to read from unallocated address %h", A);
       end
     end
 
@@ -43,7 +43,7 @@ module Memory(input [31:0] A_in, WD, input WE, CLK, MemToRegM, output reg [31:0]
       end else if (A <= 32'h00000801 && A >= 32'h00000401) begin
         data[A] <= WD;
       end else begin
-        $display("Tried to write to unallocated address %h", A);
+        $display($time, ": Tried to write to unallocated address %h", A);
       end
     end // MemWrite signal if block
   end // always block

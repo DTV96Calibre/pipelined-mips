@@ -21,7 +21,7 @@ module Memory(input [31:0] A_in, WD, input WE, CLK, MemToRegM, output reg [31:0]
 
   assign A = A_in;
 
-  always @(posedge CLK) begin
+  always @(*) begin
     if (A <= `STACK_TOP && A >= `STACK_BOT) begin
       RD <= stack[A];
     end else if (A <= 32'h00000400 && A >= 32'h00000000) begin
@@ -30,11 +30,10 @@ module Memory(input [31:0] A_in, WD, input WE, CLK, MemToRegM, output reg [31:0]
       RD <= data[A];
     end else begin
       RD <= `undefined;
-      if (MemToRegM) begin
-        $display($time, ": Tried to read from unallocated address %h", A);
-      end
     end
+  end
 
+  always @(posedge CLK) begin
     if (WE) begin // MemWrite signal
       if (A <= 32'h7FFF_FFFC && A >= 32'h7FFF_FBFC) begin
         stack[A] <= WD;

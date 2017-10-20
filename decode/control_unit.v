@@ -80,7 +80,8 @@ module control_unit(opcode, funct, instr_shamt, reg_rt_id, is_r_type, reg_write,
 		((opcode == `SPECIAL) && reg_write_special) |
 		(opcode == `ADDIU) |
 		(opcode == `ORI) |
-		(opcode == `LUI);
+		(opcode == `LUI) |
+		(opcode == `LW);
 
 	assign reg_write_special = !((funct == `JR) || (funct == `SYSCALL));
 	

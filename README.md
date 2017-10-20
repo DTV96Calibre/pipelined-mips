@@ -3,20 +3,23 @@ A Verilog implementation of a pipelined MIPS processor
 
 ![alt text][cpu_diagram]
 
-[cpu_diagram]: https://www.eg.bucknell.edu/~csci320/2016-fall/wp-content/uploads/2015/09/harris_pipeline_mips.png "Pipelined processor with full hazard handling"
+[cpu_diagram]: /updated_pipeline_mips.png "Pipelined processor with full hazard handling"
 
 Note: We do not own the above diagram and are only using it for reference when building our iVerilog implementation.
 
 ## Design
-The processor roughly follows the Harris & Hennessy diagram shown above. Each pipeline stage is separated by pipeline registers which act as buffers between the stages.
+The processor follows the modified Harris & Hennessy diagram shown above. Each pipeline stage is separated by pipeline registers which act as buffers between the stages. Note that not all features are shown and Jump unit is only shown at a
+high level and lacking wiring.
 
 In the actual iVerilog code, each stage is encapsulated within a module (e.g. *mem_state* encapsulates the Memory stage logic). This allows for easier high-level wiring and readability that closely reflects the design paradigm. Each stage's encapsulating module contains the register bank feeding that stage and all the logic associated with that stage.
 
 ### Fetch
 
-Fetch differs very little from the original diagram provided to us at the beginning of the project. The major differences exist in the new pc mux which is flipped due to iverilog setting the control signal to 1 initially thus causing an immediate jump. The second change is the placement of the enable bit which exists within the pc module. In addition the starting point of the pc is hard coded to avoid junk code produced by the mips compilers when necessary.
+Fetch differs very little from the original diagram provided to us at the beginning of the project. The major differences exist in the new pc mux which is flipped due to iverilog setting the control signal to 1 initially thus causing an immediate jump. The second change is the placement of the enable bit which exists within the pc module. In addition the starting point of the pc is hard coded to avoid junk code produced by the mips compilers when necessary. All of this logic is self contained in the fetch module located in fetch/fetch.v. This is wired to the fetch pipline module in cpu, which handles passing information between stages. 
 
 ### Decode
+Decode consists of 3 major modules the decoder, control, and jump unit. The decoder handles breaking down instructions into their parts for use by the registers, control, jump, and other stages. The register file handles all register reading and writing. The control unit takes handles creating control signals using combinational logic. Finaly the jump unit handles determining what instructions are jumps or branches and sends signals to fetch as appropriate. This stage can be stalled by the hazard unit or cleared for branches or jumps.
+
 
 ### Execute
 

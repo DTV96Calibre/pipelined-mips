@@ -62,6 +62,10 @@ project, any top-level testbench file to be compiled is and must be located in t
 
 ## Execution
 
+This CPU expects input files to be named "program.v", and start with the following two instructions, at word-address @1000_0000: a NOP (0000_0000) and a J to the first instruction of main (J 0x10_0008, for a normal program).
+These requirements are due to 1) our processor's inability to handle the first instruction read, and 2) issues with GCC generating binaries that don't start with main.
+Our two provided programs (add_test.v and fib.v) have the two initial instructions, and to run them, simply copy & rename them to program.v (`cp add_test.v program.v`). Then type `make` to execute the program.
+
 ## Testing
 
 ### mem_test.v

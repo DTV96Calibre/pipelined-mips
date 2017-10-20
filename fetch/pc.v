@@ -13,7 +13,8 @@ begin
 end
 initial
 begin
-    cur_count <= 32'h0040002C;
+    // See readme for the required starting two bytes of the binary.
+    cur_count <= 32'h00400000;
 end
 endmodule
 

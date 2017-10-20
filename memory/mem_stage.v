@@ -9,9 +9,10 @@
  */
 module mem_stage(input CLK, RegWriteE, MemtoRegE, MemWriteE,
   input [31:0] ALUOutE, WriteDataE,
-	input [4:0] WriteRegE,
+	input [4:0] WriteRegE, input HasDivE, input [31:0] DivHiE, input [31:0] DivLoE,
   output RegWriteM, MemtoRegM,
-  output [31:0] RD, ALUOutM, output [4:0] WriteRegM);
+  output [31:0] RD, ALUOutM, output [4:0] WriteRegM, output HasDivM,
+  output [31:0] DivHiM, output [31:0] DivLoM);
 
   // Internal wires
   wire MemWriteM;
@@ -22,8 +23,10 @@ module mem_stage(input CLK, RegWriteE, MemtoRegE, MemWriteE,
     // inputs
     CLK, RegWriteE, MemtoRegE,
     MemWriteE, ALUOutE, WriteDataE, WriteRegE,
+    HasDivE, DivHiE, DivLoE,
     // outputs
-    RegWriteM, MemtoRegM, MemWriteM, ALUOutM, WriteDataM, WriteRegM);
+    RegWriteM, MemtoRegM, MemWriteM, ALUOutM, WriteDataM, WriteRegM,
+    HasDivM, DivHiM, DivLoM);
 
   Memory dataMemory(.A_in(ALUOutM), .WD(WriteDataM), .WE(MemWriteM), .CLK(CLK), .MemToRegM(MemtoRegM), .RD(RD));
 

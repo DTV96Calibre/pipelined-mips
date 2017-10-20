@@ -27,10 +27,11 @@
 //
 // TODO: Add reg_jump_address for jr instruction.
 module decoder(clock, instruction, pc_plus_four, writeback_value,
-		should_writeback, writeback_id, ra_write, ra_write_value, is_r_type, reg_rs_value,
+		should_writeback, writeback_id, ra_write, ra_write_value, is_r_type,
+	       	reg_hi_W, reg_lo_W, HasDivW, reg_rs_value,
 		reg_rt_value, sign_immediate, unsign_immediate, branch_address, jump_address,
 		reg_rs_id, reg_rt_id, reg_rd_id, shamt, funct, opcode,
-		syscall_funct, syscall_param1);
+		syscall_funct, syscall_param1, reg_hi_D, reg_lo_D);
 	
 	// The clock.
 	input wire clock;
@@ -66,6 +67,13 @@ module decoder(clock, instruction, pc_plus_four, writeback_value,
 	// register.
 	input wire ra_write;
 	input wire [31:0] ra_write_value;
+
+	// This is true if the hi and lo registers should be updated with the
+	// values in reg_hi_W and reg_lo_W.
+	input wire HasDivW;
+
+	input wire [31:0] reg_hi_W;
+	input wire [31:0] reg_lo_W;
 
 	// This outputs the value of the RS register of the current instruction.
 	// If the current instruction is J-type, consider this output junk.
@@ -128,6 +136,11 @@ module decoder(clock, instruction, pc_plus_four, writeback_value,
 	// Technically, there are 4 sycall parameters, but we only implement
 	// syscalls that need one parameter.
 	output wire [31:0] syscall_param1;
+
+	// The values of the special Hi and Lo registers, used in divide and
+	// multiply instructions.
+	output wire [31:0] reg_hi_D;
+	output wire [31:0] reg_lo_D;
 	
 	// These are the register ID's decoded assuming the current instruction
 	// is R-type.
@@ -162,10 +175,15 @@ module decoder(clock, instruction, pc_plus_four, writeback_value,
 		.reg_write_value(writeback_value),
 		.ra_write(ra_write),
 		.ra_write_value(ra_write_value),
+		.reg_hi_W(reg_hi_W),
+		.reg_lo_W(reg_lo_W),
+		.HasDivW(HasDivW),
 		.reg_rs_value(reg_rs_value),
 		.reg_rt_value(reg_rt_value),
 		.syscall_funct(syscall_funct),
-		.syscall_param1(syscall_param1)
+		.syscall_param1(syscall_param1),
+		.reg_hi_D(reg_hi_D),
+		.reg_lo_D(reg_lo_D)
 		);
 
 	// This module extracts info from the current instruction, assuming it

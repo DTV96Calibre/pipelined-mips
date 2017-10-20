@@ -8,15 +8,17 @@
 `include "decode/control_unit.v"
 `include "decode/jump_unit.v"
 `include "hazard/hazard_unit.v"
+`include "decode/mf_unit.v"
 
 module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback_id, reg_write_W,
+		HasDivW, DivHiW, DivLoW,
 
 		reg_rs_value, reg_rt_value, immediate, jump_address, reg_rs_id,
 		reg_rt_id, reg_rd_id, shamtD,
 
 		reg_write_D, mem_to_reg, mem_write, alu_op, alu_src, reg_dest, pc_src,
 		
-		syscall, syscall_funct, syscall_param1);
+		syscall, syscall_funct, syscall_param1, MfOpInD, HasDivD);
 
 	input wire clock;
 
@@ -28,6 +30,9 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	input wire [31:0] writeback_value;
 	input wire [4:0] writeback_id;
 	input wire reg_write_W;
+	input wire HasDivW;
+	input wire [31:0] DivHiW;
+	input wire [31:0] DivLoW;
 
 	// Outputs from the decode stage.
 	output wire [31:0] reg_rs_value;
@@ -51,6 +56,12 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	output wire syscall;
 	output wire [31:0] syscall_funct;
 	output wire [31:0] syscall_param1;
+
+	output wire HasDivD;
+
+	// This output is used by the hazard unit. It is 1 if the current
+	// instruction is MFHI or MFLO.
+	output wire MfOpInD;
 	
 	// Internal wires.
 	wire is_r_type;
@@ -67,6 +78,14 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	wire [31:0] sign_immediate;
 	wire [31:0] unsign_immediate;
 
+	wire is_mf_hi;
+	wire is_mf_lo;
+	
+	// The values of the special hi and lo registers, used during divides
+	// and multiplies.
+	wire [31:0] reg_hi;
+	wire [31:0] reg_lo;
+
 	// True if ra_write_value needs to be written to the ra register.
 	wire ra_write;
 	wire [31:0] ra_write_value;
@@ -76,7 +95,14 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 	// instructions.
 	wire [4:0] instr_shamt;
 	
+	// This wire holds the rs value specified by the rs register id. The
+	// actual rs value may be modified by the mf unit to be the
+	// special hi or lo registers.
+	wire [31:0] instr_rs_value;
+	
 	assign immediate = imm_is_unsigned ? unsign_immediate : sign_immediate;
+
+	assign MfOpInD = is_mf_hi | is_mf_lo;
 
 	// The decoder
 	// TODO: Link part of Jump and Link not implemented!
@@ -90,7 +116,10 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.is_r_type (is_r_type),
 		.ra_write (ra_write),
 		.ra_write_value (ra_write_value),
-		.reg_rs_value (reg_rs_value),
+		.HasDivW (HasDivW),
+		.reg_hi_W (DivHiW),
+		.reg_lo_W (DivLoW),
+		.reg_rs_value (instr_rs_value),
 		.reg_rt_value (reg_rt_value),
 		.sign_immediate (sign_immediate),
 		.unsign_immediate (unsign_immediate),
@@ -103,7 +132,9 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.funct (funct),
 		.opcode (opcode),
 		.syscall_funct (syscall_funct),
-		.syscall_param1 (syscall_param1)
+		.syscall_param1 (syscall_param1),
+		.reg_hi_D (reg_hi),
+		.reg_lo_D (reg_lo)
 		);
 
 	// The control unit.
@@ -122,7 +153,10 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.branch_variant (branch_variant),
 		.syscall (syscall),
 		.imm_is_unsigned (imm_is_unsigned),
-		.shamtD (shamtD)
+		.shamtD (shamtD),
+		.is_mf_hi (is_mf_hi),
+		.is_mf_lo (is_mf_lo),
+		.HasDivD (HasDivD)
 		);
 	
 	// The jump decider.
@@ -138,7 +172,16 @@ module decode_stage(clock, instruction, pc_plus_four, writeback_value, writeback
 		.ra_write_value (ra_write_value),
 		.ra_write (ra_write)
 		);
-	
+
+	mf_unit mf_decider(
+		.reg_hi (reg_hi),
+		.reg_lo (reg_lo),
+		.instr_rs_value (instr_rs_value),
+		.is_mf_hi (is_mf_hi),
+		.is_mf_lo (is_mf_lo),
+		.actual_rs_value (reg_rs_value)
+		
+		);	
 
 endmodule
 

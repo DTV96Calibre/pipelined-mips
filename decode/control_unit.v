@@ -12,7 +12,8 @@
 
 module control_unit(opcode, funct, instr_shamt, reg_rt_id, is_r_type, reg_write,
 		mem_to_reg, mem_write, alu_op, alu_src, reg_dest,
-		branch_variant, syscall, imm_is_unsigned, shamtD);
+		branch_variant, syscall, imm_is_unsigned, shamtD, is_mf_hi, is_mf_lo,
+		HasDivD);
 
 	input wire [5:0] opcode;
 	input wire [5:0] funct;
@@ -44,6 +45,15 @@ module control_unit(opcode, funct, instr_shamt, reg_rt_id, is_r_type, reg_write,
 	
 	output wire [4:0] shamtD;
 
+	// 1 if the current instruction is MFHI, 0 otherwise.
+	output wire is_mf_hi;
+
+	// 1 if the current instruction is MFLO, 0 otherwise.
+	output wire is_mf_lo;
+
+	// 1 if the current instruction is divide.
+	output wire HasDivD;
+
 	// wire is_r_type;	// Declared as an output.
 	wire is_i_type;
 	wire is_j_type;
@@ -56,6 +66,11 @@ module control_unit(opcode, funct, instr_shamt, reg_rt_id, is_r_type, reg_write,
 
 	alu_control alu(opcode, funct, alu_op);
 	classify classifier(opcode, is_r_type, is_i_type, is_j_type);
+
+	assign is_mf_hi = (opcode == `SPECIAL) && (funct == `MFHI);
+	assign is_mf_lo = (opcode == `SPECIAL) && (funct == `MFLO);
+
+	assign HasDivD = (opcode == `SPECIAL) && (funct == `DIV);
 
 	assign mem_write =
 		(opcode == `SW) |

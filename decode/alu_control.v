@@ -24,6 +24,9 @@ module alu_control(opcode, funct, alu_op);
 					`SUBU: alu_op = `ALU_sub;
 					`SRA: alu_op = `ALU_sra;
 					`SLL: alu_op = `ALU_sll;
+					`DIV: alu_op = `ALU_div;
+					`MFHI: alu_op = `ALU_rs_pass;
+					`MFLO: alu_op = `ALU_rs_pass;
 					default: alu_op = `ALU_undef;
 				endcase
 			end

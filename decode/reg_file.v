@@ -19,8 +19,9 @@
 // the value discretely rather than continuously, it must wait until posedge of
 // the clock.
 module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id,
-		reg_write_value, reg_rs_value, reg_rt_value, ra_write,
-		ra_write_value, syscall_funct, syscall_param1);
+		reg_write_value, reg_hi_W, reg_lo_W, HasDivW, reg_rs_value, reg_rt_value,
+		ra_write, ra_write_value, syscall_funct, syscall_param1, reg_hi_D,
+		reg_lo_D);
 	
 	// The clock. This is inverted, then passed on to the individual
 	// registers.
@@ -48,6 +49,13 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 	input wire ra_write;
 	input wire [31:0] ra_write_value;
 
+	// This wire is true when the hi and lo registers should be updated
+	// with the values in reg_hi_W and reg_lo_W.
+	input wire HasDivW;
+
+	input wire [31:0] reg_hi_W;
+	input wire [31:0] reg_lo_W;
+
 	// This is the value of the rs and rt registers, respectively. These
 	// values change immediately as the inputs reg_rs_id and reg_rt_id
 	// change. See note at the top of the module if sampling from these
@@ -59,6 +67,11 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 	// is determined by $v0, and the first parameter is determined by $a0
 	output wire [31:0] syscall_funct;
 	output wire [31:0] syscall_param1;
+
+	// The values of the special hi and lo registers. They're used in
+	// divide and multiply instructions.
+	output wire [31:0] reg_hi_D;
+	output wire [31:0] reg_lo_D;
 	
 	// This is the inverse of the current clock. This is used to change
 	// the register array's behavior from write-at-posedge to
@@ -112,6 +125,9 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 			assign bank_outputs[i] = reg_output;
 		end
 	endgenerate
+
+	register hi(inverted_clock, HasDivW, reg_hi_W, reg_hi_D);
+	register lo(inverted_clock, HasDivW, reg_lo_W, reg_lo_D);
 
 	always@(*) begin
 		reg_rs_value <= bank_outputs[reg_rs_id];

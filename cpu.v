@@ -85,6 +85,22 @@ module cpu(clock);
     wire [31:0] ReadDataW;
     wire [31:0] ALUOutW;
     wire [4:0] WriteRegW;
+    
+    // This control signal is true if the decode stage has decoded a MFHI or
+    // MFLO opcode. It's used by the hazard unit.
+    wire MfOpInD;
+
+    // Divide stuff.
+    wire HasDivD;
+    wire HasDivE;
+    wire HasDivM;
+    wire HasDivW;
+    wire [31:0] DivHiE;
+    wire [31:0] DivHiM;
+    wire [31:0] DivHiW;
+    wire [31:0] DivLoE;
+    wire [31:0] DivLoM;
+    wire [31:0] DivLoW;
 
     //this wire is a mux for ResultW
     wire [31:0] ResultW;
@@ -130,6 +146,9 @@ module cpu(clock);
         .writeback_value(ResultW), 
         .writeback_id(WriteRegW), 
         .reg_write_W(RegWriteW),
+	.HasDivW(HasDivW),
+	.DivHiW(DivHiW),
+	.DivLoW(DivLoW),
 
         // Decode to EX.
         .reg_rs_value(RD1D),
@@ -147,6 +166,10 @@ module cpu(clock);
         .alu_op(ALUControlD),
         .alu_src(ALUSrcD),
         .reg_dest(RegDstD),
+	.HasDivD(HasDivD),
+
+	// Control to Hazard
+	.MfOpInD(MfOpInD),
 
         // Outputs back to fetch.
 	.pc_src (pc_src_d),
@@ -181,6 +204,7 @@ module cpu(clock);
 	.syscallD(syscallD),
 	.syscall_functD(syscall_functD),
 	.syscall_param1D(syscall_param1D),
+	.HasDivD(HasDivD),
 
         // Output to the mem stage.
         .RegWriteE(RegWriteE),
@@ -196,6 +220,9 @@ module cpu(clock);
         .SignImmE(SignImmE),
         .ResultW(ResultW),
         .ALUOutM(ALUOutM),
+	.HasDivE(HasDivE),
+	.DivHiE(DivHiE),
+	.DivLoE(DivLoE),
 
         // Input from the hazard unit.
         .ForwardAE(ForwardAE),
@@ -215,11 +242,17 @@ module cpu(clock);
         .ALUOutE(ALUOutE),
         .WriteDataE(WriteDataE),
         .WriteRegE(WriteRegE),
+	.HasDivE(HasDivE),
+	.DivHiE(DivHiE),
+	.DivLoE(DivLoE),
         .RegWriteM(RegWriteM),
         .MemtoRegM(MemtoRegM),
         .RD(Writeback_RD),
         .ALUOutM(ALUOutM),
-        .WriteRegM(WriteRegM)
+        .WriteRegM(WriteRegM),
+	.HasDivM(HasDivM),
+	.DivHiM(DivHiM),
+	.DivLoM(DivLoM)
         );
     
     //writeback pipe
@@ -229,12 +262,19 @@ module cpu(clock);
     .MemtoRegM(MemtoRegM), 
     .ReadDataM(Writeback_RD), 
     .ALUOutM(ALUOutM), 
-    .WriteRegM(WriteRegM), 
+    .WriteRegM(WriteRegM),
+    .HasDivM(HasDivM),
+    .DivHiM(DivHiM),
+    .DivLoM(DivLoM), 
     .RegWriteW(RegWriteW), 
     .MemtoRegW(MemtoRegW), 
     .ReadDataW(ReadDataW), 
     .ALUOutW(ALUOutW), 
-    .WriteRegW(WriteRegW));
+    .WriteRegW(WriteRegW),
+    .HasDivW(HasDivW),
+    .DivHiW(DivHiW),
+    .DivLoW(DivLoW)
+    );
     
     hazard_unit hazard(
 	// Inputs
@@ -252,6 +292,10 @@ module cpu(clock);
 	.WriteRegW(WriteRegW),
 	.RegWriteW(RegWriteW),
 	.syscallD(syscallD),
+	.MfOpInD(MfOpInD),
+	.HasDivE(HasDivE),
+	.HasDivM(HasDivM),
+	.HasDivW(HasDivW),
 
 	// Outputs
 	.StallF(StallF),

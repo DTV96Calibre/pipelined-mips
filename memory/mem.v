@@ -19,7 +19,7 @@ module Memory(input [31:0] A_in, WD, input WE, CLK, MemToRegM, output reg [31:0]
 
   wire [31:0] A;
 
-  assign A = A_in - 16;
+  assign A = A_in;
 
   always @(posedge CLK) begin
     if (A <= `STACK_TOP && A >= `STACK_BOT) begin

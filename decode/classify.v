@@ -19,14 +19,13 @@ module classify(opcode, is_r_type, is_i_type, is_j_type);
 	// sll, subu
 	// pseudo-instructions: move a, b = addu a, $zero, b
 	assign is_r_type = 
-		(opcode == `SPECIAL) |
-		(opcode == `JR) |
-		(opcode == `SYSCALL) |
-		(opcode == `BREAK);
+		(opcode == `SPECIAL);
 
 	// I-type: addiu, lui, lw, sw, sb, b, bltz, bne, bnez
 	// pseudo-instructions: 
-	// 	li a, imm = ori a, $zero, imm
+	// 	li a, imm = 
+	// 		lui a, upper_16(imm)
+	// 		ori a, a, lower_16(imm)
 	//	b label = beq $zero, $zero, label
 	//	bnez $r, label = bne $zero, $r, label
 	assign is_i_type = 
@@ -37,7 +36,8 @@ module classify(opcode, is_r_type, is_i_type, is_j_type);
 		(opcode == `SB) |
 		(opcode == `REGIMM) |
 		(opcode == `BNE) |
-		(opcode == `BEQ);
+		(opcode == `BEQ) |
+		(opcode == `ORI);
 
 	// J-type: j, jal
 	assign is_j_type = 

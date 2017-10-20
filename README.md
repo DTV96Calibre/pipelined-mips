@@ -15,7 +15,7 @@ In the actual iVerilog code, each stage is encapsulated within a module (e.g. *m
 
 ### Fetch
 
-Fetch differs very little from the original diagram provided to us at the beginning of the project. The major differences exist in the new pc mux which is flipped due to iverilog setting the control signal to 1 initially thus causing an immediate jump. The second change is the placement of the enable bit which exists within the pc module. In addition the starting point of the pc is hard coded to avoid junk code produced by the mips compilers when necessary. All of this logic is self contained in the fetch module located in fetch/fetch.v. This is wired to the fetch pipline module in cpu, which handles passing information between stages. 
+Fetch differs very little from the original diagram provided to us at the beginning of the project. The major differences exist in the new pc mux which is flipped due to iverilog setting the control signal to 1 initially thus causing an immediate jump. The second change is the placement of the enable bit which exists within the pc module. In addition the starting point of the pc is hard coded to avoid junk code produced by the mips compilers when necessary. All of this logic is self contained in the fetch module located in fetch/fetch.v. This is wired to the fetch pipline module in cpu, which handles passing information between stages.
 
 ### Decode
 Decode consists of 3 major modules the decoder, control, and jump unit. The decoder handles breaking down instructions into their parts for use by the registers, control, jump, and other stages. The register file handles all register reading and writing. The control unit takes handles creating control signals using combinational logic. Finaly the jump unit handles determining what instructions are jumps or branches and sends signals to fetch as appropriate. This stage can be stalled by the hazard unit or cleared for branches or jumps.
@@ -78,6 +78,7 @@ Currently, only add_test.v is working. fib.v is stuck at the end of a loop, wher
 ## Testing
 Compile the module level tests such as *mem_test.v* as described in **Compilation**. Each test reports success or failure while providing information
 relevant to failures.
+Try add_test in your browser [here](http://tpcg.io/tZuRJe).
 
 ### mem_test.v
 This test expects that the default preallocated memory is 1k each for data, text, and stack.

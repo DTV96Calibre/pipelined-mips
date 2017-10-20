@@ -90,8 +90,9 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 			wire reg_ra_should_write;
 			wire [31:0] reg_output;
 			wire is_ra_reg;
+			wire [31:0] adj_reg_write_value;
 
-			register r(inverted_clock, reg_should_write_gen | reg_ra_should_write, reg_write_value, reg_output);
+			register r(inverted_clock, reg_should_write_gen | reg_ra_should_write, adj_reg_write_value, reg_output);
 			
 			// True if this is the ra register.
 			assign is_ra_reg = (i == `ra);
@@ -103,8 +104,9 @@ module reg_file(clock, reg_rs_id, reg_rt_id, control_reg_write, control_write_id
 			// Open this register for writing if reg_write_id
 			// matches and it's NOT permanent.
 			assign reg_should_write_gen = ((i == control_write_id) ? 1 : 0) & (i != 0) & control_reg_write;
-
-
+			
+			assign adj_reg_write_value = reg_ra_should_write ? ra_write_value : reg_write_value;
+			
 			// Move this register's value on to the corresponding output if
 			// the reg_id matches.
 			assign bank_outputs[i] = reg_output;

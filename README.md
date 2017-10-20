@@ -23,7 +23,7 @@ Fetch differs very little from the original diagram provided to us at the beginn
 The execute stage is encapsulated in its own module, which instantiates, in addition to the execute
 pipeline register, four multiplexers and the ALU module. Two muxes are 2-way (those that generate the
 outgoing WriteRegE and SrcBE signals) and two are 3-way (those that generate the SrcAE and WriteDataE
-signals). The inputs and outputs from the execute pipeline register are equivalent to those of the 
+signals). The inputs and outputs from the execute pipeline register are equivalent to those of the
 diagram with the exception of the new 5-bit shamtD input and shamtE output, which feed into the ALU and
 specifies the amount by which the source register Rs is shifted.
 
@@ -49,6 +49,9 @@ modifying the text segment in *Data Memory* doesn't affect the instructions bein
 
 
 ### Writeback
+Writeback is primarily handled by the register module and writeback pipeline
+register. Otherwise, it's a glorified mux and wire. Writeback was so insignificant
+we forgot to implement it for quite a bit of time.
 
 
 ## Compilation
@@ -61,12 +64,15 @@ an executable called *outputfilename*. Due to pathing limitations with the inclu
 project, any top-level testbench file to be compiled is and must be located in the root directory.
 
 ## Execution
+Using make runs the testbench. If you want to rerun the testbench, run ./testbench
 
 This CPU expects input files to be named "program.v", and start with the following two instructions, at word-address @1000_0000: a NOP (0000_0000) and a J to the first instruction of main (J 0x10_0008, for a normal program).
 These requirements are due to 1) our processor's inability to handle the first instruction read, and 2) issues with GCC generating binaries that don't start with main.
 Our two provided programs (add_test.v and fib.v) have the two initial instructions, and to run them, simply copy & rename them to program.v (`cp add_test.v program.v`). Then type `make` to execute the program.
 
 ## Testing
+Compile the module level tests such as *mem_test.v* as described in **Compilation**. Each test reports success or failure while providing information
+relevant to failures.
 
 ### mem_test.v
 This test expects that the default preallocated memory is 1k each for data, text, and stack.

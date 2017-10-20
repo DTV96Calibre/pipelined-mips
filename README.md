@@ -73,6 +73,8 @@ This CPU expects input files to be named "program.v", and start with the followi
 These requirements are due to 1) our processor's inability to handle the first instruction read, and 2) issues with GCC generating binaries that don't start with main.
 Our two provided programs (add_test.v and fib.v) have the two initial instructions, and to run them, simply copy & rename them to program.v (`cp add_test.v program.v`). Then type `make` to execute the program.
 
+Currently, only add_test.v is working. fib.v is stuck at the end of a loop, where GCC is attempting to zero-out an array on the stack. It's probably a mistake in JR to RA, or in LW'ing RA from the stack.
+
 ## Testing
 Compile the module level tests such as *mem_test.v* as described in **Compilation**. Each test reports success or failure while providing information
 relevant to failures.
